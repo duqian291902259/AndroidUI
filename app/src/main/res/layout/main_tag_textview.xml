@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tv_tag"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="duqian"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:gravity="center"
+    android:textColor="@color/white"
+    android:layout_margin="5dp"
+    android:background="@drawable/bg_shape_textview_selector"
+    android:textSize="15dp" />
+
