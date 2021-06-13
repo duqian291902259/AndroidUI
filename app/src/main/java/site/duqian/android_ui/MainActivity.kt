@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import site.duqian.android_ui.fragment.BaseFragment
+import site.duqian.android_ui.fragment.ImageEffectFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +22,8 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             launchMainFragment()
         }
+
+        launchFragment(ImageEffectFragment.newInstance())
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
