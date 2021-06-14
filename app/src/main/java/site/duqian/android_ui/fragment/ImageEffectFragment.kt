@@ -23,18 +23,17 @@ class ImageEffectFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        val rootView: LinearLayout = view.findViewById(R.id.wrap_images)
+        /*val rootView: LinearLayout = view.findViewById(R.id.wrap_iv_mode)
         for (mode in PorterDuff.Mode.values()) {
             Log.d("dq-android-ui", "name=${mode.name},ordinal=${mode.ordinal}")
             val imageView = DuffModeImageView(context)
             val lp = LinearLayout.LayoutParams(400, 300)
             lp.topMargin = 20
             imageView.layoutParams = lp
-            //imageView.setPorterDuffMode(mode)
-            rootView.addView(imageView)
             imageView.setPorterDuffMode(mode)
+            rootView.addView(imageView)
         }
-        rootView.requestLayout()
+        rootView.requestLayout()*/
     }
 
     override fun initData() {

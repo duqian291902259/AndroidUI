@@ -26,9 +26,10 @@ abstract class BaseDuffModeView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    private var paint: Paint? = null
-    private var mWidth = 0
-    private var mHeight = 0
+    var mRectBorder: Rect? = null
+    var paint: Paint? = null
+    var mWidth = 0
+    var mHeight = 0
     private var srcBm: Bitmap? = null
     private var dstBm: Bitmap? = null
     var mMode: Int = 0
@@ -44,15 +45,16 @@ abstract class BaseDuffModeView @JvmOverloads constructor(
         setLayerType(LAYER_TYPE_SOFTWARE, null)
         //初始化画笔
         paint = Paint()
+        Log.d("dq-android-ui", "mMode=$mMode")
 
         updatePorterDuffMode()
     }
 
     fun updatePorterDuffMode() {
         for (mode in PorterDuff.Mode.values()) {
-            Log.d("dq-android-ui", "name=${mode.name},ordinal=${mode.ordinal}")
             if (mMode == mode.ordinal) {
                 mPorterDuffMode = mode
+                Log.d("dq-android-ui", "name=${mode.name},ordinal=${mode.ordinal}")
                 break
             }
         }
@@ -62,6 +64,9 @@ abstract class BaseDuffModeView @JvmOverloads constructor(
         super.onLayout(changed, left, top, right, bottom)
         mWidth = right - left
         mHeight = bottom - top
+        if (mRectBorder == null) {
+            mRectBorder = Rect(0, 0, mWidth, mHeight)
+        }
         srcBm = createSrcBitmap(mWidth, mHeight)
         dstBm = createDstBitmap(mWidth, mHeight)
     }
@@ -70,17 +75,21 @@ abstract class BaseDuffModeView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.drawBitmap(dstBm!!, 0f, 0f, paint)
-        if (mMode > 0) {
+        if (mMode > 0)
             paint?.xfermode = PorterDuffXfermode(mPorterDuffMode)
-        }
         canvas.drawBitmap(srcBm!!, 0f, 0f, paint)
         paint?.xfermode = null
 
+        drawText(canvas)
+
+    }
+
+    private fun drawText(canvas: Canvas) {
         paint?.style = Paint.Style.FILL
         paint?.strokeWidth = 12f
         paint?.textSize = 30f
-        paint?.color = Color.parseColor("#cccccc")
-        canvas.drawText(mPorterDuffMode.name, 0f, mHeight/2.0f, paint!!)
+        paint?.color = Color.parseColor("#FFFFFF")
+        canvas.drawText(mPorterDuffMode.name, 50f, mHeight / 2.0f, paint!!)
     }
 
     abstract fun createDstBitmap(width: Int, height: Int): Bitmap
