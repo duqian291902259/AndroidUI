@@ -16,6 +16,15 @@
         android:layout_marginTop="10dp"
         android:gravity="center">
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="PorterDuffXfermode"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+
         <site.duqian.android_ui.image_effect.DuffModeImageView
             android:id="@+id/iv_test_avatar"
             android:layout_width="105dp"
@@ -36,14 +45,6 @@
             app:src="@mipmap/ic_avatar_duqian"
             app:dst="@mipmap/ic_rect_red_shape"
             app:border="@mipmap/ic_rect_red" />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:text="PorterDuffXfermode"
-            android:textColor="@color/white"
-            android:textSize="16dp" />
 
         <site.duqian.android_ui.image_effect.DuffModeView
             android:layout_width="100dp"

@@ -106,25 +106,29 @@ abstract class BaseDuffModeView @JvmOverloads constructor(
             }
             mPaint?.xfermode = null
 
-            if (mBorderBitmap != null && mRectBorder != null) {
-                canvas.drawBitmap(mBorderBitmap!!, null, mRectBorder!!, mPaint)
-            }
+            // TODO: 6/15/21 画梯形
 
             drawText(canvas)
 
+            if (mBorderBitmap != null && mRectBorder != null) {
+                canvas.drawBitmap(mBorderBitmap!!, null, mRectBorder!!, mPaint)
+            }
         } catch (e: Exception) {
             Log.d("dq-ui", "onDraw error $e")
         }
     }
 
     private fun drawText(canvas: Canvas) {
-        if (!TextUtils.isEmpty(mPorterDuffMode.name)) {
-            mPaint?.style = Paint.Style.FILL
-            mPaint?.strokeWidth = 12f
-            mPaint?.textSize = 30f
-            mPaint?.setShadowLayer(20f, 5f, 2f, Color.YELLOW)
-            mPaint?.color = Color.parseColor("#00FFFF")
-            canvas.drawText(mPorterDuffMode.name, 50f, mHeight / 2.0f, mPaint!!)
+        mPaint?.apply {
+            val name = mPorterDuffMode.name
+            if (!TextUtils.isEmpty(name)) {
+                this.style = Paint.Style.FILL
+                this.strokeWidth = 30f
+                this.textSize = 30f
+                this.setShadowLayer(30f, 5f, 2f, Color.YELLOW)
+                this.color = Color.parseColor("#00FFFF")
+                canvas.drawText(name, (mWidth-this.measureText(name))/2, mHeight - this.textSize, this)
+            }
         }
     }
 
@@ -134,6 +138,7 @@ abstract class BaseDuffModeView @JvmOverloads constructor(
 
     fun updateSrcImage(srcId: Int) {
         mSrcImageResId = srcId
+        requestLayout()
         invalidate()
     }
 }

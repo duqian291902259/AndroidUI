@@ -28,7 +28,7 @@ class ImageEffectFragment : BaseFragment() {
         }, 3000L)
 
         imageView?.setOnClickListener {
-            imageView.updateSrcImage(R.mipmap.ic_avatar_gray_dq)
+            imageView.updateSrcImage(R.mipmap.ic_avatar_duqian)
         }
 
         imageView?.setOnLongClickListener {
