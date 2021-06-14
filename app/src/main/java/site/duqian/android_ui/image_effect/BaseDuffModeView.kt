@@ -34,6 +34,7 @@ abstract class BaseDuffModeView @JvmOverloads constructor(
     var mWidth = 0
     var mHeight = 0
     var mMode: Int = 0
+    var mSrcImageResId: Int = R.mipmap.ic_avatar_duqian //外部传入融合的图像res id
     var mPorterDuffMode: PorterDuff.Mode = PorterDuff.Mode.SRC_IN
     var mSrcBitmap: Bitmap? = null
     var mDstBitmap: Bitmap? = null
@@ -54,7 +55,6 @@ abstract class BaseDuffModeView @JvmOverloads constructor(
         mIsLeft =
             obtainStyledAttributes?.getBoolean(R.styleable.BaseDuffModeView_isLeft, false) ?: false
         obtainStyledAttributes?.recycle()
-
 
         mSrcBitmap = UIUtils.drawable2Bitmap(mSrcId)
         mDstBitmap = UIUtils.drawable2Bitmap(mDstId)
@@ -128,7 +128,12 @@ abstract class BaseDuffModeView @JvmOverloads constructor(
         }
     }
 
-    abstract fun createDstBitmap(width: Int, height: Int): Bitmap
+    abstract fun createDstBitmap(width: Int, height: Int): Bitmap?
 
-    abstract fun createSrcBitmap(width: Int, height: Int): Bitmap
+    abstract fun createSrcBitmap(width: Int, height: Int): Bitmap?
+
+    fun updateSrcImage(srcId: Int) {
+        mSrcImageResId = srcId
+        invalidate()
+    }
 }

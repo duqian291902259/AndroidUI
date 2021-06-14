@@ -16,6 +16,28 @@
         android:layout_marginTop="10dp"
         android:gravity="center">
 
+        <site.duqian.android_ui.image_effect.DuffModeImageView
+            android:id="@+id/iv_test_avatar"
+            android:layout_width="105dp"
+            android:layout_height="76dp"
+            android:layout_marginTop="10dp"
+            app:isLeft="true"
+            app:mode="5"
+            app:src="@mipmap/ic_avatar_duqian"
+            app:dst="@mipmap/ic_rect_blue_shape"
+            app:border="@mipmap/ic_rect_blue" />
+
+        <site.duqian.android_ui.image_effect.DuffModeImageView
+            android:layout_width="105dp"
+            android:layout_height="76dp"
+            android:layout_marginTop="10dp"
+            app:isLeft="false"
+            app:mode="5"
+            app:src="@mipmap/ic_avatar_duqian"
+            app:dst="@mipmap/ic_rect_red_shape"
+            app:border="@mipmap/ic_rect_red" />
+
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="30dp"
@@ -41,7 +63,7 @@
             android:layout_marginTop="10dp"
             app:mode="2" />
 
-        <!--<site.duqian.android_ui.image_effect.DuffModeImageView
+        <site.duqian.android_ui.image_effect.DuffModeImageView
             android:layout_width="105dp"
             android:layout_height="76dp"
             android:layout_marginTop="10dp"
@@ -51,27 +73,7 @@
             android:layout_width="105dp"
             android:layout_height="76dp"
             android:layout_marginTop="10dp"
-            app:mode="4" />-->
-
-        <site.duqian.android_ui.image_effect.DuffModeImageView
-            android:layout_width="105dp"
-            android:layout_height="76dp"
-            android:layout_marginTop="10dp"
-            app:isLeft="true"
-            app:mode="5"
-            app:src="@mipmap/ic_avator_duqian"
-            app:dst="@mipmap/ic_rect_blue_shape"
-            app:border="@mipmap/ic_rect_blue" />
-
-        <site.duqian.android_ui.image_effect.DuffModeImageView
-            android:layout_width="105dp"
-            android:layout_height="76dp"
-            android:layout_marginTop="10dp"
-            app:isLeft="false"
-            app:mode="5"
-            app:src="@mipmap/ic_avator_duqian"
-            app:dst="@mipmap/ic_rect_red_shape"
-            app:border="@mipmap/ic_rect_red" />
+            app:mode="4" />
 
         <!--<site.duqian.android_ui.image_effect.DuffModeImageView
             android:layout_width="105dp"

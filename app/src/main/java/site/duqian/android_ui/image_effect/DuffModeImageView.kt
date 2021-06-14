@@ -23,7 +23,7 @@ class DuffModeImageView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : BaseDuffModeView(context, attrs, defStyleAttr) {
 
-    override fun createDstBitmap(width: Int, height: Int): Bitmap {
+    override fun createDstBitmap(width: Int, height: Int): Bitmap? {
         return getBorderBitmap(width, height)
     }
 
@@ -34,7 +34,7 @@ class DuffModeImageView @JvmOverloads constructor(
      * 小于src则把src的裁截区缩小。
      * 第一个Rect 代表要绘制的bitmap 区域，第二个 Rect 代表的是要将bitmap 绘制在屏幕的什么地方
      */
-    override fun createSrcBitmap(width: Int, height: Int): Bitmap {
+    override fun createSrcBitmap(width: Int, height: Int): Bitmap? {
         return getAvatarBitmap(width, height)
     }
 
@@ -42,14 +42,18 @@ class DuffModeImageView @JvmOverloads constructor(
      * 原图不能修改，需要copy
      * Caused by: java.lang.IllegalStateException: Immutable bitmap passed to Canvas constructor
      */
-    private fun getAvatarBitmap(width: Int, height: Int): Bitmap {
-        val bitmap: Bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_avator_duqian)
-            .copy(Bitmap.Config.ARGB_8888, true)
+    private fun getAvatarBitmap(width: Int, height: Int): Bitmap? {
+        val bitmap: Bitmap = BitmapFactory.decodeResource(resources, mSrcImageResId)
+            ?.copy(Bitmap.Config.ARGB_8888, true) ?: return null
+        // TODO: 6/14/21 如果头像小于形状大小，要做居中处理
+        val isSmaller = bitmap.width < width
         val canvas = Canvas(bitmap)
         val dstPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        var src = Rect(30, 0, bitmap.width, bitmap.height)
-        if (!mIsLeft) {//向右偏移一点
-            src = Rect(0, 0, bitmap.width - 60, bitmap.height)
+        val left = if (isSmaller) width - bitmap.width / 2 else 0
+        val top = if (isSmaller) height - bitmap.height / 2 else 0
+        var src = Rect(left, top, bitmap.width, bitmap.height)
+        if (!mIsLeft && !isSmaller) {//向右偏移一点
+            src = Rect(left, top, bitmap.width - 60, bitmap.height)
         }
         val rect = Rect(0, 0, width, height)
         canvas.drawBitmap(
@@ -57,25 +61,21 @@ class DuffModeImageView @JvmOverloads constructor(
             rect,
             dstPaint
         )
+
         return bitmap
     }
 
-    private fun getBorderBitmap(width: Int, height: Int): Bitmap {
-        lateinit var bitmap: Bitmap
+    /**
+     * 以指定形状大小为目标显示的大小，所以不需要额外处理宽高
+     */
+    private fun getBorderBitmap(width: Int, height: Int): Bitmap? {
+        var bitmap: Bitmap? = null
         if (mDstBitmap == null || mDstBitmap?.isRecycled == true) {
             bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_rect_blue_shape)
                 .copy(Bitmap.Config.ARGB_8888, true)
         } else {
-            bitmap = mDstBitmap!!.copy(Bitmap.Config.ARGB_8888, true)
+            bitmap = mDstBitmap!!//.copy(Bitmap.Config.ARGB_8888, true)
         }
-        /*val canvas = Canvas(bitmap)
-        val dstPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        val rect = Rect(0, 0, width, height)
-        canvas.drawBitmap(
-            bitmap, null,
-            rect,
-            dstPaint
-        )*/
         return bitmap
     }
 

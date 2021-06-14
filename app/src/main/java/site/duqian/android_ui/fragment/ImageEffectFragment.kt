@@ -1,9 +1,6 @@
 package site.duqian.android_ui.fragment
 
-import android.graphics.PorterDuff
-import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
 import site.duqian.android_ui.R
 import site.duqian.android_ui.image_effect.DuffModeImageView
 
@@ -23,6 +20,23 @@ class ImageEffectFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
+
+        val imageView: DuffModeImageView? = view.findViewById(R.id.iv_test_avatar)
+
+        imageView?.postDelayed({
+            imageView.updateSrcImage(R.mipmap.ic_avatar_duqian)
+        }, 3000L)
+
+        imageView?.setOnClickListener {
+            imageView.updateSrcImage(R.mipmap.ic_avatar_gray_dq)
+        }
+
+        imageView?.setOnLongClickListener {
+            imageView.updateSrcImage(R.mipmap.ic_qrcode)
+            true
+        }
+
+
         /*val rootView: LinearLayout = view.findViewById(R.id.wrap_iv_mode)
         for (mode in PorterDuff.Mode.values()) {
             Log.d("dq-android-ui", "name=${mode.name},ordinal=${mode.ordinal}")
