@@ -38,6 +38,7 @@ abstract class BaseDuffModeView @JvmOverloads constructor(
     var mSrcBitmap: Bitmap? = null
     var mDstBitmap: Bitmap? = null
     var mBorderBitmap: Bitmap? = null
+    var mIsLeft = false
 
     private var mSrcId: Drawable? = null
     private var mDstId: Drawable? = null
@@ -50,6 +51,8 @@ abstract class BaseDuffModeView @JvmOverloads constructor(
         mSrcId = obtainStyledAttributes?.getDrawable(R.styleable.BaseDuffModeView_src)
         mDstId = obtainStyledAttributes?.getDrawable(R.styleable.BaseDuffModeView_dst)
         mBorderId = obtainStyledAttributes?.getDrawable(R.styleable.BaseDuffModeView_border)
+        mIsLeft =
+            obtainStyledAttributes?.getBoolean(R.styleable.BaseDuffModeView_isLeft, false) ?: false
         obtainStyledAttributes?.recycle()
 
 

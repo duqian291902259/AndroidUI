@@ -23,7 +23,7 @@
             android:textColor="@color/white"
             android:textSize="16dp" />
 
-        <!--<site.duqian.android_ui.image_effect.DuffModeView
+        <site.duqian.android_ui.image_effect.DuffModeView
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="10dp"
@@ -41,7 +41,7 @@
             android:layout_marginTop="10dp"
             app:mode="2" />
 
-        <site.duqian.android_ui.image_effect.DuffModeImageView
+        <!--<site.duqian.android_ui.image_effect.DuffModeImageView
             android:layout_width="105dp"
             android:layout_height="76dp"
             android:layout_marginTop="10dp"
@@ -57,6 +57,7 @@
             android:layout_width="105dp"
             android:layout_height="76dp"
             android:layout_marginTop="10dp"
+            app:isLeft="true"
             app:mode="5"
             app:src="@mipmap/ic_avator_duqian"
             app:dst="@mipmap/ic_rect_blue_shape"
@@ -66,6 +67,7 @@
             android:layout_width="105dp"
             android:layout_height="76dp"
             android:layout_marginTop="10dp"
+            app:isLeft="false"
             app:mode="5"
             app:src="@mipmap/ic_avator_duqian"
             app:dst="@mipmap/ic_rect_red_shape"

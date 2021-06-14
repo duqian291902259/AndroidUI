@@ -43,19 +43,17 @@ class DuffModeImageView @JvmOverloads constructor(
      * Caused by: java.lang.IllegalStateException: Immutable bitmap passed to Canvas constructor
      */
     private fun getAvatarBitmap(width: Int, height: Int): Bitmap {
-        lateinit var bitmap: Bitmap
-        //if (mSrcBitmap == null || mSrcBitmap?.isRecycled == true) {
-        bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_avator_duqian)
+        val bitmap: Bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_avator_duqian)
             .copy(Bitmap.Config.ARGB_8888, true)
-        /*} else {
-            bitmap = mSrcBitmap!!.copy(Bitmap.Config.ARGB_8888, true)
-        }*/
         val canvas = Canvas(bitmap)
         val dstPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        //val src = Rect(80, 30, bitmap.width, bitmap.height)
+        var src = Rect(30, 0, bitmap.width, bitmap.height)
+        if (!mIsLeft) {//向右偏移一点
+            src = Rect(0, 0, bitmap.width - 60, bitmap.height)
+        }
         val rect = Rect(0, 0, width, height)
         canvas.drawBitmap(
-            bitmap, null,
+            bitmap, src,
             rect,
             dstPaint
         )
