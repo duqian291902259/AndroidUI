@@ -3,10 +3,13 @@ package site.duqian.android_ui.image_effect
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
+import android.graphics.drawable.Drawable
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import site.duqian.android_ui.R
+import site.duqian.android_ui.utils.UIUtils
 
 /**
  * Description:两图融合
@@ -27,25 +30,37 @@ abstract class BaseDuffModeView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     var mRectBorder: Rect? = null
-    var paint: Paint? = null
+    var mPaint: Paint? = null
     var mWidth = 0
     var mHeight = 0
-    private var srcBm: Bitmap? = null
-    private var dstBm: Bitmap? = null
     var mMode: Int = 0
     var mPorterDuffMode: PorterDuff.Mode = PorterDuff.Mode.SRC_IN
+    var mSrcBitmap: Bitmap? = null
+    var mDstBitmap: Bitmap? = null
+    var mBorderBitmap: Bitmap? = null
+
+    private var mSrcId: Drawable? = null
+    private var mDstId: Drawable? = null
+    private var mBorderId: Drawable? = null
 
     init {
         val obtainStyledAttributes =
             context?.obtainStyledAttributes(attrs, R.styleable.BaseDuffModeView)
         mMode = obtainStyledAttributes?.getInt(R.styleable.BaseDuffModeView_mode, 0) ?: 0
+        mSrcId = obtainStyledAttributes?.getDrawable(R.styleable.BaseDuffModeView_src)
+        mDstId = obtainStyledAttributes?.getDrawable(R.styleable.BaseDuffModeView_dst)
+        mBorderId = obtainStyledAttributes?.getDrawable(R.styleable.BaseDuffModeView_border)
         obtainStyledAttributes?.recycle()
 
+
+        mSrcBitmap = UIUtils.drawable2Bitmap(mSrcId)
+        mDstBitmap = UIUtils.drawable2Bitmap(mDstId)
+        mBorderBitmap = UIUtils.drawable2Bitmap(mBorderId)
+
         //禁用硬件加速
-        setLayerType(LAYER_TYPE_SOFTWARE, null)
+        this.setLayerType(LAYER_TYPE_SOFTWARE, null)
         //初始化画笔
-        paint = Paint()
-        Log.d("dq-android-ui", "mMode=$mMode")
+        mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
         updatePorterDuffMode()
     }
@@ -64,32 +79,50 @@ abstract class BaseDuffModeView @JvmOverloads constructor(
         super.onLayout(changed, left, top, right, bottom)
         mWidth = right - left
         mHeight = bottom - top
-        if (mRectBorder == null) {
+        if (mRectBorder == null && mWidth > 0 && mHeight > 0) {
             mRectBorder = Rect(0, 0, mWidth, mHeight)
         }
-        srcBm = createSrcBitmap(mWidth, mHeight)
-        dstBm = createDstBitmap(mWidth, mHeight)
+        mDstBitmap = createDstBitmap(mWidth, mHeight)
     }
 
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        canvas.drawBitmap(dstBm!!, 0f, 0f, paint)
-        if (mMode > 0)
-            paint?.xfermode = PorterDuffXfermode(mPorterDuffMode)
-        canvas.drawBitmap(srcBm!!, 0f, 0f, paint)
-        paint?.xfermode = null
+        try {
+            super.onDraw(canvas)
+            //获取src图片
+            mSrcBitmap = createSrcBitmap(mWidth, mHeight)
 
-        drawText(canvas)
+            if (mDstBitmap != null) {
+                canvas.drawBitmap(mDstBitmap!!, 0f, 0f, mPaint)
+            }
+            if (mMode > 0) {
+                mPaint?.xfermode = PorterDuffXfermode(mPorterDuffMode)
+            }
+            if (mSrcBitmap != null) {
+                canvas.drawBitmap(mSrcBitmap!!, 0f, 0f, mPaint)
+            }
+            mPaint?.xfermode = null
 
+            if (mBorderBitmap != null && mRectBorder != null) {
+                canvas.drawBitmap(mBorderBitmap!!, null, mRectBorder!!, mPaint)
+            }
+
+            drawText(canvas)
+
+        } catch (e: Exception) {
+            Log.d("dq-ui", "onDraw error $e")
+        }
     }
 
     private fun drawText(canvas: Canvas) {
-        paint?.style = Paint.Style.FILL
-        paint?.strokeWidth = 12f
-        paint?.textSize = 30f
-        paint?.color = Color.parseColor("#FFFFFF")
-        canvas.drawText(mPorterDuffMode.name, 50f, mHeight / 2.0f, paint!!)
+        if (!TextUtils.isEmpty(mPorterDuffMode.name)) {
+            mPaint?.style = Paint.Style.FILL
+            mPaint?.strokeWidth = 12f
+            mPaint?.textSize = 30f
+            mPaint?.setShadowLayer(20f, 5f, 2f, Color.YELLOW)
+            mPaint?.color = Color.parseColor("#00FFFF")
+            canvas.drawText(mPorterDuffMode.name, 50f, mHeight / 2.0f, mPaint!!)
+        }
     }
 
     abstract fun createDstBitmap(width: Int, height: Int): Bitmap

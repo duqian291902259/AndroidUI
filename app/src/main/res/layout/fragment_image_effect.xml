@@ -21,9 +21,9 @@
             android:layout_height="30dp"
             android:text="PorterDuffXfermode"
             android:textColor="@color/white"
-            android:textSize="16dp"/>
+            android:textSize="16dp" />
 
-        <site.duqian.android_ui.image_effect.DuffModeView
+        <!--<site.duqian.android_ui.image_effect.DuffModeView
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="10dp"
@@ -51,19 +51,25 @@
             android:layout_width="105dp"
             android:layout_height="76dp"
             android:layout_marginTop="10dp"
-            app:mode="4" />
+            app:mode="4" />-->
 
         <site.duqian.android_ui.image_effect.DuffModeImageView
             android:layout_width="105dp"
             android:layout_height="76dp"
             android:layout_marginTop="10dp"
-            app:mode="5" />
+            app:mode="5"
+            app:src="@mipmap/ic_avator_duqian"
+            app:dst="@mipmap/ic_rect_blue_shape"
+            app:border="@mipmap/ic_rect_blue" />
 
         <site.duqian.android_ui.image_effect.DuffModeImageView
             android:layout_width="105dp"
             android:layout_height="76dp"
             android:layout_marginTop="10dp"
-            app:mode="6" />
+            app:mode="5"
+            app:src="@mipmap/ic_avator_duqian"
+            app:dst="@mipmap/ic_rect_red_shape"
+            app:border="@mipmap/ic_rect_red" />
 
         <!--<site.duqian.android_ui.image_effect.DuffModeImageView
             android:layout_width="105dp"
@@ -118,23 +124,6 @@
             android:layout_height="76dp"
             android:layout_marginTop="10dp"
             app:mode="15" />-->
-
-        <site.duqian.android_ui.image_effect.DuffModeView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="10dp"
-            app:mode="7" />
-
-
-        <!--<LinearLayout
-            android:id="@+id/wrap_iv_mode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:gravity="center" />-->
-
 
     </LinearLayout>
 

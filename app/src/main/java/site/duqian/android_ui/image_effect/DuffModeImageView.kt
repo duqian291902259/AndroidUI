@@ -23,19 +23,8 @@ class DuffModeImageView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : BaseDuffModeView(context, attrs, defStyleAttr) {
 
-    private var mBorderBitmap: Bitmap? = null
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        if (mBorderBitmap == null) {
-            mBorderBitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_rect_blue)
-        }
-        canvas.drawBitmap(mBorderBitmap!!, null, mRectBorder!!, paint)
-    }
-
     override fun createDstBitmap(width: Int, height: Int): Bitmap {
         return getBorderBitmap(width, height)
-        //return getAvatarBitmap(width, height)
     }
 
     /**
@@ -47,7 +36,6 @@ class DuffModeImageView @JvmOverloads constructor(
      */
     override fun createSrcBitmap(width: Int, height: Int): Bitmap {
         return getAvatarBitmap(width, height)
-        //return getBorderBitmap(width, height)
     }
 
     /**
@@ -55,11 +43,16 @@ class DuffModeImageView @JvmOverloads constructor(
      * Caused by: java.lang.IllegalStateException: Immutable bitmap passed to Canvas constructor
      */
     private fun getAvatarBitmap(width: Int, height: Int): Bitmap {
-        val bitmap: Bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_avator_duqian)
+        lateinit var bitmap: Bitmap
+        //if (mSrcBitmap == null || mSrcBitmap?.isRecycled == true) {
+        bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_avator_duqian)
             .copy(Bitmap.Config.ARGB_8888, true)
+        /*} else {
+            bitmap = mSrcBitmap!!.copy(Bitmap.Config.ARGB_8888, true)
+        }*/
         val canvas = Canvas(bitmap)
         val dstPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        //val src = Rect(0, 0, bitmap.width, bitmap.height)
+        //val src = Rect(80, 30, bitmap.width, bitmap.height)
         val rect = Rect(0, 0, width, height)
         canvas.drawBitmap(
             bitmap, null,
@@ -70,9 +63,14 @@ class DuffModeImageView @JvmOverloads constructor(
     }
 
     private fun getBorderBitmap(width: Int, height: Int): Bitmap {
-        val bitmap: Bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_rect_blue_shape)
-        /*    .copy(Bitmap.Config.ARGB_8888, true)
-        val canvas = Canvas(bitmap)
+        lateinit var bitmap: Bitmap
+        if (mDstBitmap == null || mDstBitmap?.isRecycled == true) {
+            bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_rect_blue_shape)
+                .copy(Bitmap.Config.ARGB_8888, true)
+        } else {
+            bitmap = mDstBitmap!!.copy(Bitmap.Config.ARGB_8888, true)
+        }
+        /*val canvas = Canvas(bitmap)
         val dstPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         val rect = Rect(0, 0, width, height)
         canvas.drawBitmap(
@@ -90,6 +88,7 @@ class DuffModeImageView @JvmOverloads constructor(
     }
 
     fun setPorterDuffMode(porterDuffMode: PorterDuff.Mode) {
+        this.mMode = porterDuffMode.ordinal
         this.mPorterDuffMode = porterDuffMode
         invalidate()
     }
