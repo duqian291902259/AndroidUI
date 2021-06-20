@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <declare-styleable name="BaseDuffModeView">
         <attr name="mode" format="integer" />
         <attr name="src" format="integer" />
@@ -7,4 +8,19 @@
         <attr name="border" format="integer" />
         <attr name="isLeft" format="boolean" />
     </declare-styleable>
+
+    <!--by dq 环形进度条，中间带间隔，支持设置进度文字,进度两种颜色设置-->
+    <declare-styleable name="CircleGapProgressView">
+        <attr name="progress_width" format="dimension" />
+        <attr name="progress_num" format="integer" />
+        <attr name="showProgressText" format="boolean" />
+        <attr name="max_progress" format="integer" />
+        <attr name="current_progress" format="integer" />
+        <attr name="gap_size" format="dimension" />
+        <attr name="bg_color" format="color" />
+        <attr name="progress_color" format="color" />
+        <attr name="text_color" format="color" />
+        <attr name="text_size" format="dimension" />
+    </declare-styleable>
+
 </resources>

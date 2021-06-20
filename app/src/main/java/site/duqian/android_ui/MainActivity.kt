@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
             launchMainFragment()
         }
 
-        launchFragment(ImageEffectFragment.newInstance())
+        //launchFragment(ImageEffectFragment.newInstance())
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
