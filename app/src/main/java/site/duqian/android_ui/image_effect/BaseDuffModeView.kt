@@ -86,14 +86,14 @@ abstract class BaseDuffModeView @JvmOverloads constructor(
             mRectBorder = Rect(0, 0, mWidth, mHeight)
         }
         mDstBitmap = createDstBitmap(mWidth, mHeight)
+        //获取src图片
+        mSrcBitmap = createSrcBitmap(mWidth, mHeight)
     }
 
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
         try {
             super.onDraw(canvas)
-            //获取src图片
-            mSrcBitmap = createSrcBitmap(mWidth, mHeight)
 
             if (mDstBitmap != null) {
                 canvas.drawBitmap(mDstBitmap!!, 0f, 0f, mPaint)
