@@ -1,4 +1,4 @@
-package site.duqian.android_ui
+package site.duqian.android_ui.fragment
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.zhy.view.flowlayout.FlowLayout
 import com.zhy.view.flowlayout.TagAdapter
 import com.zhy.view.flowlayout.TagFlowLayout
+import site.duqian.android_ui.MainActivity
+import site.duqian.android_ui.R
 import site.duqian.android_ui.fragment.BaseFragment
 import site.duqian.android_ui.fragment.ImageEffectFragment
 import site.duqian.android_ui.fragment.ProgressFragment

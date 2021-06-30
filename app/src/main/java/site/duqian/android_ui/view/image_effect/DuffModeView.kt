@@ -1,10 +1,8 @@
-package site.duqian.android_ui.image_effect
+package site.duqian.android_ui.view.image_effect
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.view.View
 
 /**
  * Description:两图融合

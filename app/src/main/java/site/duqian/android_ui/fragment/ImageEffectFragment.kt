@@ -2,7 +2,7 @@ package site.duqian.android_ui.fragment
 
 import android.view.View
 import site.duqian.android_ui.R
-import site.duqian.android_ui.image_effect.DuffModeImageView
+import site.duqian.android_ui.view.image_effect.DuffModeImageView
 
 /**
  * description:图片融合效果，比如梯形图片，圆角图片

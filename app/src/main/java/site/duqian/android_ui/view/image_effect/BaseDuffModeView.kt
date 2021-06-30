@@ -1,4 +1,4 @@
-package site.duqian.android_ui.image_effect
+package site.duqian.android_ui.view.image_effect
 
 import android.annotation.SuppressLint
 import android.content.Context
