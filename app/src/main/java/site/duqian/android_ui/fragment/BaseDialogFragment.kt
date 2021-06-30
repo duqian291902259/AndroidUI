@@ -60,7 +60,7 @@ abstract class BaseDialogFragment : DialogFragment() {
         mCancelListener?.onCancel()
     }
 
-    override fun onAttach(context: Context) {
+    /*override fun onAttach(context: Context) {
         val window: Window? = activity?.window
         val attributes: WindowManager.LayoutParams? = window?.attributes
         attributes?.width = 560
@@ -68,6 +68,6 @@ abstract class BaseDialogFragment : DialogFragment() {
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) //注意此处
         window?.attributes = attributes
         super.onAttach(context)
-    }
+    }*/
 
 }
