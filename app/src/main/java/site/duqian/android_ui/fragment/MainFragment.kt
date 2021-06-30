@@ -11,9 +11,6 @@ import com.zhy.view.flowlayout.TagAdapter
 import com.zhy.view.flowlayout.TagFlowLayout
 import site.duqian.android_ui.MainActivity
 import site.duqian.android_ui.R
-import site.duqian.android_ui.fragment.BaseFragment
-import site.duqian.android_ui.fragment.ImageEffectFragment
-import site.duqian.android_ui.fragment.ProgressFragment
 import site.duqian.android_ui.viewmodel.MainViewModel
 
 
@@ -79,6 +76,7 @@ class MainFragment : BaseFragment() {
         when (position) {
             0 -> baseFragment = ImageEffectFragment.newInstance()
             1 -> baseFragment = ProgressFragment.newInstance()
+            2 -> baseFragment = MainDialogFragment.newInstance()
         }
 
         mainActivity?.launchFragment(baseFragment)

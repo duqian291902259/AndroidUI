@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    tools:context=".fragment.ImageEffectFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:textColor="@color/white"
+            android:text="杜小菜，来个自定义进度条" />
+
+
+        <site.duqian.android_ui.view.CircleGapProgressView
+            android:id="@+id/pb_circle_left"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            app:bg_color="@color/color_progress_color_left"
+            app:current_progress="80"
+            app:gap_size="4dp"
+            app:max_progress="100"
+            app:progress_color="@color/white"
+            app:progress_num="12"
+            app:progress_width="8dp"
+            app:showProgressText="true"
+            app:text_color="@color/color_progress_color_left"
+            app:text_size="15sp" />
+
+        <site.duqian.android_ui.view.CircleGapProgressView
+            android:id="@+id/pb_circle_right"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            app:bg_color="@color/color_progress_color_right"
+            app:current_progress="30"
+            app:gap_size="4dp"
+            app:max_progress="100"
+            app:progress_color="@color/white"
+            app:progress_num="12"
+            app:progress_width="8dp"
+            app:showProgressText="true"
+            app:text_color="@color/color_progress_color_right"
+            app:text_size="15sp" />
+
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
