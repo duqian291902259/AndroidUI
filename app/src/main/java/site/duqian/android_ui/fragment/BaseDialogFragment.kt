@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
+import site.duqian.android_ui.`interface`.OnDialogCallback
 
 
 /**
@@ -21,14 +22,9 @@ import androidx.fragment.app.DialogFragment
  */
 abstract class BaseDialogFragment : DialogFragment() {
     /**
-     * 监听弹出窗是否被取消
+     * 监听弹窗callback
      */
-    var mCancelListener: OnDialogCancelListener? = null
-
-    interface OnDialogCancelListener {
-        fun onCancel()
-    }
-
+    var mDialogCallback: OnDialogCallback? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return getDialog(activity) ?: return super.onCreateDialog(savedInstanceState)
@@ -59,9 +55,13 @@ abstract class BaseDialogFragment : DialogFragment() {
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-        mCancelListener?.onCancel()
+        mDialogCallback?.onCancel()
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        mDialogCallback?.onDismiss()
+    }
     /*override fun onAttach(context: Context) {
         val window: Window? = activity?.window
         val attributes: WindowManager.LayoutParams? = window?.attributes
