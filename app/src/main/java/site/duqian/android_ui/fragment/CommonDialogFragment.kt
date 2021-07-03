@@ -68,7 +68,8 @@ class CommonDialogFragment : BaseDialogFragment() {
 
         }
         wrapDialogContent.setOnClickListener {
-            startAnimation()
+            closeDialog()
+            //startAnimation()
         }
     }
 

@@ -85,30 +85,31 @@ class MainDialogFragment : BaseFragment() {
         //relayout(rect1)
 
         //startAnimation(wrapImageBody)
-        //startTranslationAnimation(wrapImageBody)
+        startTranslationAnimation(wrapImageBody)
 
         doDialogAnimation(wrapImageBody)
     }
 
-    private fun doDialogAnimation(wrapImageBody: View) {
+    private fun doDialogAnimation(view: View) {
         val valueAnimator = ValueAnimator.ofFloat(1f, 0f)
         val marginStart = UIUtils.dp2px(context, 200f)
         val marginTop = UIUtils.dp2px(context, 400f)
-        /*val lp = wrapImageBody.layoutParams as RelativeLayout.LayoutParams
-        lp.topMargin = marginTop
-        lp.marginStart = marginStart
-        wrapImageBody.layoutParams = lp*/
 
+        val width = dialogRect.width()//UIUtils.getScreenWidth(context)
+        val height = dialogRect.height()//UIUtils.dp2px(context, 400f)
         valueAnimator.addUpdateListener {
             val value = it.animatedValue as Float
             Log.d("dq-dialog", "value=$value")
 
             //wrapImageBody.alpha = value
 
-            val layoutParams = wrapImageBody.layoutParams as RelativeLayout.LayoutParams
-            layoutParams.bottomMargin = (marginTop * value).toInt()
-            layoutParams.marginStart = (marginStart * value).toInt()
-            wrapImageBody.layoutParams = layoutParams
+            val layoutParams = view.layoutParams as RelativeLayout.LayoutParams
+            //layoutParams.bottomMargin = (marginTop * value).toInt()
+            //layoutParams.marginStart = (marginStart * value).toInt()
+            //
+            layoutParams.width = (width * value).toInt()
+            layoutParams.height = (height * value).toInt()
+            view.layoutParams = layoutParams
         }
         valueAnimator.duration = ANIM_DURATION
         valueAnimator.interpolator = LinearInterpolator()
@@ -145,7 +146,8 @@ class MainDialogFragment : BaseFragment() {
         val dx = (dialogRect.right - dialogRect.left) - (rect1.right - rect1.left).toFloat()
         val dy = (dialogRect.bottom - dialogRect.top) - (rect1.bottom - rect1.top).toFloat()
         Log.d("dq-dialog", "dx=$dx,dy=$dy")
-        val translateAnimation = TranslateAnimation(0f, -dx / 2, 0f, -dy / 2)
+        //val translateAnimation = TranslateAnimation(200f, -500f / 2, 500f, -1000f/ 2)
+        val translateAnimation = TranslateAnimation(0f, -300f, 0f, -600f)
 
         val scaleAnimation = ScaleAnimation(
             1.0f,
@@ -158,8 +160,8 @@ class MainDialogFragment : BaseFragment() {
             view.height / 2f
         )
         val alphaAnimation = AlphaAnimation(1.0f, 0.2f)
-        //mAnimatorSet.addAnimation(alphaAnimation)
-       // mAnimatorSet.addAnimation(scaleAnimation)
+        mAnimatorSet.addAnimation(alphaAnimation)
+        //mAnimatorSet.addAnimation(scaleAnimation)
         mAnimatorSet.addAnimation(translateAnimation)
 
         mAnimatorSet.duration = ANIM_DURATION//设置动画变化的持续时间
