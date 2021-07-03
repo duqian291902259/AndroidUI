@@ -84,33 +84,30 @@ class MainDialogFragment : BaseFragment() {
         Log.d("dq-dialog", "rect1=$rect1")
         //relayout(rect1)
 
-        startAnimation()
+        //startAnimation(wrapImageBody)
         //startTranslationAnimation(wrapImageBody)
 
-        //doDialogAnimation(wrapImageBody)
+        doDialogAnimation(wrapImageBody)
     }
 
     private fun doDialogAnimation(wrapImageBody: View) {
-        val valueAnimator = ValueAnimator.ofFloat(1f, 0.1f)
-        val marginStart = UIUtils.dp2px(context, 100f)
-        val marginTop = UIUtils.dp2px(context, 300f)
-        val lp = wrapImageBody.layoutParams as RelativeLayout.LayoutParams
-        lp.removeRule(RelativeLayout.CENTER_IN_PARENT)
-        lp.addRule(RelativeLayout.ALIGN_PARENT_START)
-        lp.addRule(RelativeLayout.ALIGN_PARENT_TOP)
+        val valueAnimator = ValueAnimator.ofFloat(1f, 0f)
+        val marginStart = UIUtils.dp2px(context, 200f)
+        val marginTop = UIUtils.dp2px(context, 400f)
+        /*val lp = wrapImageBody.layoutParams as RelativeLayout.LayoutParams
         lp.topMargin = marginTop
         lp.marginStart = marginStart
-        wrapImageBody.layoutParams = lp
+        wrapImageBody.layoutParams = lp*/
 
         valueAnimator.addUpdateListener {
             val value = it.animatedValue as Float
             Log.d("dq-dialog", "value=$value")
 
-            wrapImageBody.alpha = value
+            //wrapImageBody.alpha = value
 
             val layoutParams = wrapImageBody.layoutParams as RelativeLayout.LayoutParams
-            layoutParams.bottomMargin = marginTop * value.toInt()
-            layoutParams.marginEnd = marginStart * value.toInt()
+            layoutParams.bottomMargin = (marginTop * value).toInt()
+            layoutParams.marginStart = (marginStart * value).toInt()
             wrapImageBody.layoutParams = layoutParams
         }
         valueAnimator.duration = ANIM_DURATION
@@ -118,12 +115,12 @@ class MainDialogFragment : BaseFragment() {
         valueAnimator.start()
     }
 
-    private fun startAnimation() {
+    private fun startAnimation(view: View) {
         val scaleX = PropertyValuesHolder.ofFloat("scaleX", 1f, 0f)
         val scaleY = PropertyValuesHolder.ofFloat("scaleY", 1f, 0f)
         val alpha = PropertyValuesHolder.ofFloat("alpha", 1f, 0.2f)
         val animator =
-            ObjectAnimator.ofPropertyValuesHolder(ivTestImage, alpha, scaleX, scaleY)
+            ObjectAnimator.ofPropertyValuesHolder(view, alpha, scaleX, scaleY)
         animator.duration = ANIM_DURATION
         animator.interpolator = LinearInterpolator()
         animator.start()
