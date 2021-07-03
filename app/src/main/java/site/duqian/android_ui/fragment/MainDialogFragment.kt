@@ -6,6 +6,7 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Rect
+import android.util.DebugUtils
 import android.util.Log
 import android.view.View
 import android.view.animation.*
@@ -104,9 +105,6 @@ class MainDialogFragment : BaseFragment() {
             //wrapImageBody.alpha = value
 
             val layoutParams = view.layoutParams as RelativeLayout.LayoutParams
-            //layoutParams.bottomMargin = (marginTop * value).toInt()
-            //layoutParams.marginStart = (marginStart * value).toInt()
-            //
             layoutParams.width = (width * value).toInt()
             layoutParams.height = (height * value).toInt()
             view.layoutParams = layoutParams
@@ -127,46 +125,45 @@ class MainDialogFragment : BaseFragment() {
         animator.start()
     }
 
-    private fun relayout(rect1: Rect) {
-        //ivTestImage.scrollTo((rect1.right - rect1.left) / 2, (rect1.bottom - rect1.top) / 2)
-
-        ivTestImage.layout(
-            rect1.left,
-            rect1.top,
-            rect1.right, rect1.bottom
-        )
-        ivTestImage.requestLayout()
-    }
-
     private fun startTranslationAnimation(view: View) {
         val rect1 = Rect()
         tvTitle.getGlobalVisibleRect(rect1)
 
-        val mAnimatorSet = AnimationSet(true)
-        val dx = (dialogRect.right - dialogRect.left) - (rect1.right - rect1.left).toFloat()
-        val dy = (dialogRect.bottom - dialogRect.top) - (rect1.bottom - rect1.top).toFloat()
-        Log.d("dq-dialog", "dx=$dx,dy=$dy")
-        //val translateAnimation = TranslateAnimation(200f, -500f / 2, 500f, -1000f/ 2)
-        val translateAnimation = TranslateAnimation(0f, -300f, 0f, -600f)
+        //左移负数，上移负数
+        val screenWidth = UIUtils.getScreenWidth(context).toFloat()
+        val screenHeight = UIUtils.getScreenHeight(context).toFloat()
+        //val dx = -(screenWidth / 2 - (rect1.left + (rect1.right - rect1.left) / 2))
+        //val dy = -(screenHeight / 2 - (rect1.top + (rect1.bottom - rect1.top) / 2))
 
-        val scaleAnimation = ScaleAnimation(
-            1.0f,
-            0.0f,
-            1f,
-            0.0f,
-            ScaleAnimation.ABSOLUTE,
-            view.width / 2f,
-            ScaleAnimation.ABSOLUTE,
-            view.height / 2f
-        )
+        val dp2px = UIUtils.dp2px(context, 30f)
+        var dxx = 1
+        if (screenWidth < rect1.left) {
+            dxx = -1
+        }
+        var dyy = -1
+        if (screenHeight < rect1.top) {
+            dyy = 1
+        }
+
+        val dx = -(screenWidth / 2 - (rect1.left + dp2px)) + dxx * dp2px
+        val dy = -(screenHeight / 2 - (rect1.top + dp2px)) + dyy *  UIUtils.dp2px(context, 60f)
+
+        //val dx = -(dialogRect.centerX() - rect1.centerX()).toFloat()
+        //val dy = -(dialogRect.centerY() - rect1.centerY()).toFloat()
+        Log.d("dq-dialog", "dx=$dx,dy=$dy")
+        val mAnimatorSet = AnimationSet(true)
+
+        //dx=110.0,dy=-864.0
+        val translateAnimation = TranslateAnimation(0f, dx, 0f, dy)
+        //val translateAnimation = TranslateAnimation(0f, dx, 0f, dy)
+
+        val scaleAnimation = ScaleAnimation(1.0f, 0.0f, 1f, 0.0f)
         val alphaAnimation = AlphaAnimation(1.0f, 0.2f)
         mAnimatorSet.addAnimation(alphaAnimation)
         //mAnimatorSet.addAnimation(scaleAnimation)
         mAnimatorSet.addAnimation(translateAnimation)
 
         mAnimatorSet.duration = ANIM_DURATION//设置动画变化的持续时间
-        //mAnimatorSet.isFillEnabled = true//使其可以填充效果从而不回到原地
-        //mAnimatorSet.fillAfter = true//不回到起始位置
         view.startAnimation(mAnimatorSet)
         mAnimatorSet.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {

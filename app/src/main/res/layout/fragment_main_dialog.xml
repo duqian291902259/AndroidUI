@@ -14,8 +14,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:layout_alignParentEnd="true"
         android:gravity="center"
+        android:layout_alignParentEnd="true"
         android:textColor="@color/color_progress_color_right"
         android:text="测试Dialog和隐藏动画" />
 
