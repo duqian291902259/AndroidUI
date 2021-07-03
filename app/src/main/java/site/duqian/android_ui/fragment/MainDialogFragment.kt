@@ -22,12 +22,13 @@ import site.duqian.android_ui.utils.UIUtils
  */
 class MainDialogFragment : BaseFragment() {
 
+    private lateinit var wrapImageBody: View
     private lateinit var ivTestImage: ImageView
     private lateinit var tvTitle: View
 
     companion object {
         fun newInstance() = MainDialogFragment()
-        private const val ANIM_DURATION = 5000L
+        private const val ANIM_DURATION = 2000L
     }
 
     override fun getLayoutId(): Int {
@@ -35,6 +36,7 @@ class MainDialogFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
+        wrapImageBody = view.findViewById(R.id.iv_test_image)
         ivTestImage = view.findViewById(R.id.iv_test_image)
         tvTitle = view.findViewById(R.id.tv_title)
 
@@ -81,33 +83,35 @@ class MainDialogFragment : BaseFragment() {
         tvTitle.getGlobalVisibleRect(rect1)
         Log.d("dq-dialog", "rect1=$rect1")
         //relayout(rect1)
-        startTranslationAnimation(ivTestImage)
 
-        //doDialogAnimation()
+        startAnimation()
+        //startTranslationAnimation(wrapImageBody)
+
+        //doDialogAnimation(wrapImageBody)
     }
 
-    private fun doDialogAnimation() {
+    private fun doDialogAnimation(wrapImageBody: View) {
         val valueAnimator = ValueAnimator.ofFloat(1f, 0.1f)
         val marginStart = UIUtils.dp2px(context, 100f)
         val marginTop = UIUtils.dp2px(context, 300f)
-        val lp = ivTestImage.layoutParams as RelativeLayout.LayoutParams
+        val lp = wrapImageBody.layoutParams as RelativeLayout.LayoutParams
         lp.removeRule(RelativeLayout.CENTER_IN_PARENT)
         lp.addRule(RelativeLayout.ALIGN_PARENT_START)
         lp.addRule(RelativeLayout.ALIGN_PARENT_TOP)
         lp.topMargin = marginTop
         lp.marginStart = marginStart
-        ivTestImage.layoutParams = lp
+        wrapImageBody.layoutParams = lp
 
         valueAnimator.addUpdateListener {
             val value = it.animatedValue as Float
             Log.d("dq-dialog", "value=$value")
 
-            ivTestImage.alpha = value
+            wrapImageBody.alpha = value
 
-            val layoutParams = ivTestImage.layoutParams as RelativeLayout.LayoutParams
+            val layoutParams = wrapImageBody.layoutParams as RelativeLayout.LayoutParams
             layoutParams.bottomMargin = marginTop * value.toInt()
             layoutParams.marginEnd = marginStart * value.toInt()
-            ivTestImage.layoutParams = layoutParams
+            wrapImageBody.layoutParams = layoutParams
         }
         valueAnimator.duration = ANIM_DURATION
         valueAnimator.interpolator = LinearInterpolator()
@@ -115,11 +119,11 @@ class MainDialogFragment : BaseFragment() {
     }
 
     private fun startAnimation() {
-        val translateX = PropertyValuesHolder.ofInt("translateX", ivTestImage.left, tvTitle.left)
-        val translateY = PropertyValuesHolder.ofInt("translateY", ivTestImage.top, tvTitle.top)
+        val scaleX = PropertyValuesHolder.ofFloat("scaleX", 1f, 0f)
+        val scaleY = PropertyValuesHolder.ofFloat("scaleY", 1f, 0f)
         val alpha = PropertyValuesHolder.ofFloat("alpha", 1f, 0.2f)
         val animator =
-            ObjectAnimator.ofPropertyValuesHolder(ivTestImage, alpha)
+            ObjectAnimator.ofPropertyValuesHolder(ivTestImage, alpha, scaleX, scaleY)
         animator.duration = ANIM_DURATION
         animator.interpolator = LinearInterpolator()
         animator.start()
@@ -144,13 +148,22 @@ class MainDialogFragment : BaseFragment() {
         val dx = (dialogRect.right - dialogRect.left) - (rect1.right - rect1.left).toFloat()
         val dy = (dialogRect.bottom - dialogRect.top) - (rect1.bottom - rect1.top).toFloat()
         Log.d("dq-dialog", "dx=$dx,dy=$dy")
-        val animation = TranslateAnimation(0f, -dx, 0f, -dy )
+        val translateAnimation = TranslateAnimation(0f, -dx / 2, 0f, -dy / 2)
 
-        val scaleAnimation = ScaleAnimation(1.0f, 0.2f, 1f, 0.2f)
+        val scaleAnimation = ScaleAnimation(
+            1.0f,
+            0.0f,
+            1f,
+            0.0f,
+            ScaleAnimation.ABSOLUTE,
+            view.width / 2f,
+            ScaleAnimation.ABSOLUTE,
+            view.height / 2f
+        )
         val alphaAnimation = AlphaAnimation(1.0f, 0.2f)
-        mAnimatorSet.addAnimation(alphaAnimation)
-        mAnimatorSet.addAnimation(scaleAnimation)
-        mAnimatorSet.addAnimation(animation)
+        //mAnimatorSet.addAnimation(alphaAnimation)
+       // mAnimatorSet.addAnimation(scaleAnimation)
+        mAnimatorSet.addAnimation(translateAnimation)
 
         mAnimatorSet.duration = ANIM_DURATION//设置动画变化的持续时间
         //mAnimatorSet.isFillEnabled = true//使其可以填充效果从而不回到原地
@@ -163,6 +176,8 @@ class MainDialogFragment : BaseFragment() {
 
             override fun onAnimationEnd(animation: Animation?) {
                 view.visibility = View.GONE
+                view.clearAnimation()
+                mAnimatorSet.cancel()
             }
 
             override fun onAnimationRepeat(animation: Animation?) {

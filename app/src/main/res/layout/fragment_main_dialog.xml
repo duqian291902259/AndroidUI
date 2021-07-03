@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/transparent">
+    android:background="@color/transparent"
+    android:clipChildren="false">
 
     <TextView
         android:id="@+id/tv_title"
@@ -19,14 +20,22 @@
         android:text="测试Dialog和隐藏动画" />
 
     <!--用来做动画的部分-->
-    <ImageView
-        android:id="@+id/iv_test_image"
+    <RelativeLayout
+        android:id="@+id/wrap_image_body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_avatar_duqian"
         android:layout_centerInParent="true"
-        android:visibility="gone"
-        tools:visibility="visible"/>
+        android:clipChildren="false">
+
+        <ImageView
+            android:id="@+id/iv_test_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_avatar_duqian"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
 
