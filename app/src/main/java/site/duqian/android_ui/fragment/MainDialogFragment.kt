@@ -10,6 +10,8 @@ import site.duqian.android_ui.R
  */
 class MainDialogFragment : BaseFragment() {
 
+    private lateinit var wrapDialogContent: View
+    private lateinit var tvTitle: View
     companion object {
         fun newInstance() = MainDialogFragment()
     }
@@ -19,10 +21,19 @@ class MainDialogFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
+        wrapDialogContent = view.findViewById(R.id.wrap_dialog_content)
+        tvTitle = view.findViewById(R.id.tv_title)
 
+        wrapDialogContent.setOnClickListener{
+            showDialog()
+        }
     }
 
     override fun initData() {
+        showDialog()
+    }
+
+    private fun showDialog() {
         val dialog = CommonDialogFragment.newInstance(true, null)
         if (fragmentManager != null) {
             dialog.show(fragmentManager!!, "dialog")

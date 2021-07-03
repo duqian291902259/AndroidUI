@@ -50,7 +50,9 @@ abstract class BaseDialogFragment : DialogFragment() {
             }
             val window: Window? = getDialog()?.window
             val windowParams: WindowManager.LayoutParams? = window?.attributes
-            windowParams?.dimAmount = 0.0f
+            windowParams?.dimAmount = 0.6f
+            //windowParams?.width =  WindowManager.LayoutParams.MATCH_PARENT
+            //windowParams?.width = WindowManager.LayoutParams.MATCH_PARENT
             window?.attributes = windowParams
         }
     }

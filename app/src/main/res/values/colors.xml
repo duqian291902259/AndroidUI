@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
     <color name="transparent2">#00FFFFFF</color>
+    <color name="gray">#cccccc</color>
 
     <color name="color_progress_color_left">#C58EEF</color>
     <color name="color_progress_color_right">#FF759C</color>

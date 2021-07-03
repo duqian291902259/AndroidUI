@@ -4,9 +4,13 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.PixelFormat
+import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.NinePatchDrawable
+import android.view.Display
+import android.view.WindowManager
+
 
 /**
  * Description:UI工具类
@@ -49,5 +53,22 @@ object UIUtils {
     fun px2dp(context: Context, pxValue: Float): Int {
         val scale = context.resources.displayMetrics.density
         return (pxValue / scale + 0.5f).toInt()
+    }
+
+    private fun getDisplay(context: Context?): Display? {
+        val windowManager =
+            context?.applicationContext?.getSystemService(Context.WINDOW_SERVICE) as WindowManager?
+        return windowManager?.defaultDisplay
+    }
+
+    fun getScreenWidth(context: Context?): Int {
+        return getDisplay(context)?.width ?: 0
+    }
+
+    fun getScreenHeight(context: Context?): Int {
+        val point = Point()
+        getDisplay(context)?.getRealSize(point)
+        //return point.x
+        return point.y
     }
 }
