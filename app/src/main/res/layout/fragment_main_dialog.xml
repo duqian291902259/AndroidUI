@@ -15,7 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:gravity="center"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentBottom="true"
         android:textColor="@color/color_progress_color_right"
         android:text="测试Dialog和隐藏动画" />
 
@@ -36,12 +37,6 @@
             tools:visibility="visible" />
 
     </RelativeLayout>
-
-    <View
-        android:id="@+id/stub_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_centerInParent="true" />
 
 </RelativeLayout>
 
