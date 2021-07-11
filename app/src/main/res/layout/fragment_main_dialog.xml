@@ -15,10 +15,10 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:gravity="center"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="false"
         android:textColor="@color/color_progress_color_right"
-        android:text="测试Dialog和隐藏动画" />
+        android:text="点击我：测试Dialog和隐藏动画" />
 
     <!--用来做动画的部分-->
     <RelativeLayout

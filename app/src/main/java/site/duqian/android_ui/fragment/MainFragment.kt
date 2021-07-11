@@ -77,6 +77,7 @@ class MainFragment : BaseFragment() {
             0 -> baseFragment = ImageEffectFragment.newInstance()
             1 -> baseFragment = ProgressFragment.newInstance()
             2 -> baseFragment = MainDialogFragment.newInstance()
+            3 -> baseFragment = AnimationFragment.newInstance()
         }
 
         mainActivity?.launchFragment(baseFragment)

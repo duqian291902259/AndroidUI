@@ -14,7 +14,6 @@ import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import site.duqian.android_ui.`interface`.OnDialogCallback
 
-
 /**
  * Description:Dialog基类
  * @author 杜小菜,Created on 6/30/21 - 10:12 PM.
@@ -62,6 +61,7 @@ abstract class BaseDialogFragment : DialogFragment() {
         super.onDismiss(dialog)
         mDialogCallback?.onDismiss()
     }
+    
     /*override fun onAttach(context: Context) {
         val window: Window? = activity?.window
         val attributes: WindowManager.LayoutParams? = window?.attributes
@@ -71,5 +71,4 @@ abstract class BaseDialogFragment : DialogFragment() {
         window?.attributes = attributes
         super.onAttach(context)
     }*/
-
 }
