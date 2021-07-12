@@ -38,8 +38,6 @@ class AnimationFragment : BaseFragment() {
     }
 
     private fun startLoveAnimation() {
-        Toast.makeText(context, "心心动画", Toast.LENGTH_LONG).show()
-
         val anim = LoveAnimation(mRootView, mIvTestImage, mTvTitle)
         anim.startAnimation()
     }

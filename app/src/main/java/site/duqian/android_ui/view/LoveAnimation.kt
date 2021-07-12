@@ -10,6 +10,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import site.duqian.android_ui.R
+import site.duqian.android_ui.utils.UIUtils
 import site.duqian.android_ui.utils.UIUtils.dp2px
 import java.util.*
 import kotlin.math.abs
@@ -43,13 +44,16 @@ class LoveAnimation(
         iv.setImageResource(R.mipmap.ic_avatar_duqian)
         //将iv添加到父容器底部、水平居中位置
         val params = RelativeLayout.LayoutParams(mViewWidth, mViewWidth)
-        params.addRule(RelativeLayout.CENTER_HORIZONTAL)
+        params.marginEnd = dp2px(mContext, 10f)
+        //params.bottomMargin = dp2px(mContext, 80f)
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
         params.addRule(RelativeLayout.ALIGN_PARENT_END)
-        params.marginEnd = dp2px(mContext, 10f)
-        params.bottomMargin = dp2px(mContext, 80f)
         iv.layoutParams = params
+
         mRootView.addView(iv)
+
+        mViewFrom.x = mViewFrom.x
+        mViewFrom.y = mViewFrom.y
 
         //开始属性动画：平移、透明度渐变、缩放动画
         val animatorSet = getAnimator(iv)
@@ -61,7 +65,7 @@ class LoveAnimation(
                 Log.d("dq-anim", "end anim")
             }
         })
-        animatorSet.duration = ANIM_DURATION.toLong()
+        //animatorSet.duration = ANIM_DURATION.toLong()
         animatorSet.interpolator = AccelerateDecelerateInterpolator()
         animatorSet.start()
     }
@@ -73,7 +77,7 @@ class LoveAnimation(
         val scaleX = ObjectAnimator.ofFloat(animView, "scaleX", 0.3f, 1f)
         val scaleY = ObjectAnimator.ofFloat(animView, "scaleY", 0.3f, 1f)
         val enter = AnimatorSet()
-        enter.duration = ANIM_DURATION.toLong()
+        enter.duration = ANIM_DURATION.toLong() / 4
         enter.playTogether(alpha, scaleX, scaleY)
 
         //设置平移的曲线动画---贝塞尔曲线，启动估值器
@@ -87,10 +91,15 @@ class LoveAnimation(
     //得到一个贝塞尔曲线动画
     private fun getBezierValueAnimator(animView: View): ValueAnimator {
         //根据贝塞尔公式确定四个点（起始点p0，拐点1p1，拐点2p2，终点p3）
-        //PointF pointF0 = new PointF((mWidth - mViewWidth) / 2f, mHeight - mViewHeight);
-        //PointF pointF3 = new PointF(mRandom.nextInt(mWidth), 0);
-        val pointF0 = PointF(mRectFrom.left.toFloat(), mRectFrom.top.toFloat())
-        val pointF3 = PointF(mRectTo.left.toFloat(), mRectTo.top.toFloat())
+        Log.d(
+            "dq-anim",
+            "screenHeight=${UIUtils.getScreenHeight(mContext)},fromTop=${mRectFrom.top}"
+        )
+        val pointF0 = PointF(mRectFrom.left.toFloat(), mRectFrom.top.toFloat() - mViewHeight)
+        val pointF3 = PointF(
+            mRectTo.left.toFloat() + (mRectTo.width() / 2 - mViewWidth / 2),
+            mRectTo.top.toFloat() - mViewHeight
+        )
         val pointF1 = getPointF(1)
         val pointF2 = getPointF(2)
         val evaluator = BezierEvaluator(pointF1, pointF2)
@@ -99,7 +108,8 @@ class LoveAnimation(
             val pointF = animation.animatedValue as PointF
             animView.x = pointF.x
             animView.y = pointF.y
-            Log.d("dq-anim", "坐标是:x" + pointF.x + "  y:" + pointF.y)
+            Log.d("dq-anim", "坐标是:x" + pointF.x.toInt() + "  y:" + pointF.y.toInt())
+            if (animation.animatedFraction<0.8f)
             animView.alpha = 1 - animation.animatedFraction //1~0 百分比
         }
         animator.duration = ANIM_DURATION.toLong()
