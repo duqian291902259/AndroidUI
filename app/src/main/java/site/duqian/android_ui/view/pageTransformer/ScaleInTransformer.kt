@@ -1,4 +1,4 @@
-package com.huya.nimo.home.ui.widget.banner
+package site.duqian.android_ui.view.pageTransformer
 
 import android.annotation.TargetApi
 import android.os.Build
@@ -14,7 +14,7 @@ import androidx.viewpager.widget.ViewPager.PageTransformer
  */
 class ScaleInTransformer : BasePageTransformer {
     private var mMinScale = DEFAULT_MIN_SCALE
-    private val mMinAlpha = 0.6f
+    private val mMinAlpha = 0.9f
 
     constructor()
 
@@ -66,6 +66,6 @@ class ScaleInTransformer : BasePageTransformer {
     }
 
     companion object {
-        private const val DEFAULT_MIN_SCALE = 0.6f
+        private const val DEFAULT_MIN_SCALE = 0.7f
     }
 }

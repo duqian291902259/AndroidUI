@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cardview_dark_background">
+    android:background="@color/gray">
 
     <TextView
         android:id="@+id/tv_title"
@@ -20,10 +20,8 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_margin="20dp"
         android:layout_height="300dp"
         android:layout_centerInParent="true"
-        android:background="@color/white"
-        android:layout_below="@+id/tv_title" />
+        android:background="@color/white" />
 
 </RelativeLayout>

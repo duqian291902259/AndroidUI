@@ -5,9 +5,10 @@ import android.widget.RelativeLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.huya.nimo.home.ui.widget.banner.ScaleInTransformer
+import site.duqian.android_ui.view.pageTransformer.ScaleInTransformer
 import site.duqian.android_ui.R
 import site.duqian.android_ui.utils.dp
+import site.duqian.android_ui.view.pageTransformer.ZoomOutPageTransformer
 
 /**
  * description:ViewPager转场效果
@@ -35,7 +36,8 @@ class ViewPagerFragment : BaseFragment() {
     override fun initData() {
         fragmentList = ArrayList()
         fragmentList!!.add(AnimationFragment())
-        //fragmentList!!.add(MainDialogFragment())
+        fragmentList!!.add(ImageEffectFragment())
+        fragmentList!!.add(ImageEffectFragment())
         fragmentList!!.add(ImageEffectFragment())
         fragmentList!!.add(ProgressFragment())
 
@@ -43,16 +45,18 @@ class ViewPagerFragment : BaseFragment() {
             activity?.let { MyFragmentStateAdapter(it, fragmentList!!) }
         mViewPager.adapter = adapter
         mViewPager.setPageTransformer(ScaleInTransformer())//设置页面切换的动画
+        //mViewPager.setPageTransformer(ZoomOutPageTransformer())//设置页面切换的动画
         mViewPager.isUserInputEnabled = true //false ，禁用页面滑动
 
-        mViewPager.currentItem = 0
+        mViewPager.currentItem = 2
 
         val lp = mViewPager.layoutParams as RelativeLayout.LayoutParams
         val margin = 5.dp.toInt()
         lp.setMargins(margin, 0, margin,0)
         mViewPager.layoutParams = lp
         val margin2 = 10.dp.toInt()
-        mViewPager.setPadding(margin2,margin,margin,margin2)
+        mViewPager.setPadding(margin2,10,margin2,10)
+        mViewPager.clipToPadding = false
     }
 
     class MyFragmentStateAdapter(

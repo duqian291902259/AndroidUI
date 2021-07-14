@@ -1,9 +1,8 @@
-package com.huya.nimo.home.ui.widget.banner
+package site.duqian.android_ui.view.pageTransformer
 
 import android.annotation.TargetApi
 import android.os.Build
 import android.view.View
-import androidx.viewpager.widget.ViewPager.PageTransformer
 import androidx.viewpager2.widget.ViewPager2
 
 /**
