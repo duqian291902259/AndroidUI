@@ -15,6 +15,7 @@ class MainViewModel : ViewModel() {
         "ProgressBar" to "自定义进度条，圆角矩形，环形，时钟，表",
         "Dialog" to "自定义对话框：弹窗，提示，警告，说明",
         "Animation" to "自定义动画：移动，缩放，旋转，alpha，属性动画",
+        "ViewPager" to "ViewPager转场效果",
         "Shape" to "自定义形状：圆环，矩形，渐变，按钮",
         "FloatWindow" to "悬浮窗特效",
     )

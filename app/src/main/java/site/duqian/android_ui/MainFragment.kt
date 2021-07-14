@@ -1,4 +1,4 @@
-package site.duqian.android_ui.fragment
+package site.duqian.android_ui
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.zhy.view.flowlayout.FlowLayout
 import com.zhy.view.flowlayout.TagAdapter
 import com.zhy.view.flowlayout.TagFlowLayout
-import site.duqian.android_ui.MainActivity
-import site.duqian.android_ui.R
+import site.duqian.android_ui.fragment.*
 import site.duqian.android_ui.viewmodel.MainViewModel
 
 
@@ -78,6 +77,7 @@ class MainFragment : BaseFragment() {
             1 -> baseFragment = ProgressFragment.newInstance()
             2 -> baseFragment = MainDialogFragment.newInstance()
             3 -> baseFragment = AnimationFragment.newInstance()
+            4 -> baseFragment = ViewPagerFragment.newInstance()
         }
 
         mainActivity?.launchFragment(baseFragment)

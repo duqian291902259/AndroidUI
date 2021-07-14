@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import site.duqian.android_ui.fragment.BaseFragment
-import site.duqian.android_ui.fragment.CommonDialogFragment
-import site.duqian.android_ui.fragment.MainFragment
 
 class MainActivity : AppCompatActivity() {
 
