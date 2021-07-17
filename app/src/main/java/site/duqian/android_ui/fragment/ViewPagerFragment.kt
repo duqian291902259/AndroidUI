@@ -49,12 +49,11 @@ class ViewPagerFragment : BaseFragment() {
         mViewPager.isUserInputEnabled = true //false ，禁用页面滑动
 
         mViewPager.currentItem = 2
+        mViewPager.offscreenPageLimit = 3
 
         val lp = mViewPager.layoutParams as RelativeLayout.LayoutParams
-        val margin = 5.dp.toInt()
-        lp.setMargins(margin, 0, margin,0)
         mViewPager.layoutParams = lp
-        val margin2 = 10.dp.toInt()
+        val margin2 = 20.dp.toInt()
         mViewPager.setPadding(margin2,10,margin2,10)
         mViewPager.clipToPadding = false
     }
