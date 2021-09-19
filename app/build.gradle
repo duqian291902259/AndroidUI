@@ -40,16 +40,21 @@ android {
     }*/
 }
 
-test {
+/*test {
     finalizedBy jacocoTestReport // report is always generated after tests run
 }
 jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
-}
+}*/
 
 jacoco {
     toolVersion = "0.8.7"
-    reportsDirectory = layout.buildDirectory.dir('dqJacocoReport')
+    //reportsDirectory = layout.buildDirectory.dir('dqJacocoReport')
+}
+
+tasks.register('jacocoCoverageReport', JacocoReport) {
+    //executionData run
+    //sourceSets sourceSets.main
 }
 dependencies {
 
