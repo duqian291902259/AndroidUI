@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'jacoco'
 }
+apply from:'jacoco.gradle'
 
 android {
     compileSdkVersion 30
@@ -22,6 +23,9 @@ android {
     }
 
     buildTypes {
+        debug{
+            testCoverageEnabled true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -40,22 +44,12 @@ android {
     }*/
 }
 
-/*test {
-    finalizedBy jacocoTestReport // report is always generated after tests run
-}
-jacocoTestReport {
-    dependsOn test // tests are required to run before generating the report
-}*/
-
 jacoco {
     toolVersion = "0.8.7"
     //reportsDirectory = layout.buildDirectory.dir('dqJacocoReport')
 }
 
-tasks.register('jacocoCoverageReport', JacocoReport) {
-    //executionData run
-    //sourceSets sourceSets.main
-}
+
 dependencies {
 
     implementation project(path: ':mylibrary')

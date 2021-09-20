@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import site.duqian.android_ui.fragment.BaseFragment
+import site.duqian.test.CCJacocoHelper
 
 class MainActivity : AppCompatActivity() {
 
@@ -52,5 +53,10 @@ class MainActivity : AppCompatActivity() {
         } else {
             launchMainFragment()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        CCJacocoHelper.generateEcFile(this.applicationContext,true)
     }
 }
