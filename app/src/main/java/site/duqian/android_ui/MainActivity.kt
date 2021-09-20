@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import site.duqian.android_ui.fragment.BaseFragment
+import site.duqian.mylibrary.KotlinUtil
 import site.duqian.test.CCJacocoHelper
 
 class MainActivity : AppCompatActivity() {
@@ -22,6 +23,10 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             launchMainFragment()
         }
+
+        //JavaUtil.testAdd()
+
+        KotlinUtil.testAdd(100)
 
         //launchFragment(ImageEffectFragment.newInstance())
     }
@@ -57,6 +62,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        CCJacocoHelper.generateEcFile(this.applicationContext,true)
+        CCJacocoHelper.generateEcFile(this.applicationContext, true)
     }
 }

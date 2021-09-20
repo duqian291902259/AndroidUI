@@ -4,19 +4,15 @@ jacoco {
     toolVersion = "0.8.7"
 }
 
-def projectDirPath = "../../$projectDir/"
 //源代码路径
 def coverageSourceDirs = [
-        "$projectDir\\src\\main\\java",
-        "/Users/duqian/Development/MyGitHub/AndroidUI/mylibrary/src/main/java"
+        "$projectDir\\src\\main\\java"
 ]
 
 //class文件路径
 def coverageClassDirs = [
         "$buildDir/intermediates/javac/debug/classes",
         "$buildDir/tmp/kotlin-classes/debug",
-        "/Users/duqian/Development/MyGitHub/AndroidUI/mylibrary/build/intermediates/javac/debug/classes",
-        "/Users/duqian/Development/MyGitHub/AndroidUI/mylibrary/build/tmp/kotlin-classes/debug",
 ]
 
 //解析ec文件的任务，会根据指定的class路径、源码路径、ec路径进行解析输出
@@ -34,7 +30,6 @@ task jacocoTestReportNew(type: JacocoReport) {
                 // 过滤不需要统计的class文件
                 excludes: ['**/R*.class',
                            '**/*$InjectAdapter.class',
-                           '**/BuildConfig.class',
                            '**/*$ModuleAdapter.class',
                            '**/*$ViewInjector*.class'
                 ])
@@ -48,7 +43,7 @@ task jacocoTestReportNew(type: JacocoReport) {
 
     doFirst {
         System.out.println("buildDir=$buildDir")
-        System.out.println("projectDir=$projectDir")
+        System.out.println("buildDir=$projectDir")
         //遍历class路径下的所有文件，替换字符
         coverageClassDirs.each { path ->
             new File(path).eachFileRecurse { file ->
