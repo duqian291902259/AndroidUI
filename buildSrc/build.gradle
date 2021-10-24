@@ -1,0 +1,43 @@
+buildscript {
+    // 这里是给插件使用
+    def myProperties = new Properties()
+    project.rootProject.file("../gradle.properties").newDataInputStream().with {
+        myProperties.load(it)
+        it.close()
+    }
+    ext.kotlin_version = myProperties['kotlin_version']
+    ext.gradle_tool_version = myProperties['gradle_tool_version']
+    repositories {
+        mavenCentral()
+        google()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+repositories {
+    mavenCentral()
+    google()
+}
+
+
+apply plugin: 'groovy'
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation gradleApi()
+    implementation 'com.android.tools.build:gradle:' + gradle_tool_version
+
+    //implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.6.14'
+    //implementation 'org.eclipse.jgit:org.eclipse.jgit:5.0.2.201807311906-r'
+    //implementation 'commons-net:commons-net:2.0'
+    implementation 'org.codehaus.groovy:groovy-all:2.5.11'
+
+    implementation 'org.apache.logging.log4j:log4j:2.11.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.13'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.13'
+}

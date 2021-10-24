@@ -11,7 +11,7 @@ import java.io.OutputStream
 /**
  * Description:Jacoco工具类
  *
- * @author n20241 Created by 杜小菜 on 2021/9/8 - 11:55 . E-mail: duqian2010@gmail.com
+ * @author  Created by 杜小菜 on 2021/9/8 - 11:55 . E-mail: duqian2010@gmail.com
  */
 object CCJacocoHelper {
     private const val TAG = "JacocoHelper"
