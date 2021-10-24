@@ -1,17 +1,17 @@
+import site.duqian.gradle.coverage.JacocoAndroidPlugin
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'jacoco'
 }
-apply plugin: JacocoAndroidPlugin
 
 apply from:'jacoco.gradle'
 
-
+apply plugin: JacocoAndroidPlugin
 jacocoReportConfig {
     //isJacocoEnable project.rootProject.ext.coverageEnabled
     appName "cc-android" //固定
-    def localHost = "http://10.255.209.49:8090"
+    def localHost = "http://127.0.0.1:8090"
     jacocoHost = localHost//报告地址
     isDiffJacoco = false //是否差量更新,本地暂时不要开启，服务端处理
     destination "$buildDir/jacoco/"
@@ -20,7 +20,6 @@ jacocoReportConfig {
     pullDiffClassShell = "${project.projectDir}/shell/pullDiffClass.sh" //获取差异class
     includes = ['site.duqian.android_ui'] //只处理这个包名的类
 }
-
 
 android {
     compileSdkVersion 30

@@ -69,7 +69,7 @@ class JacocoTransform extends Transform{
         if (!dirInputs.isEmpty() || !jarInputs.isEmpty()) {
             if (jacocoExtension.isJacocoEnable) {
                 println("${TAG} isJacocoEnable")
-                //copy class到 cc-start/classes
+                //copy class到 app/classes
                 copy(transformInvocation, dirInputs, jarInputs, jacocoExtension.includes)
                 //提交classes 到git
                 gitPush(jacocoExtension.gitPushShell, "auto commit diff-classes for coverage")

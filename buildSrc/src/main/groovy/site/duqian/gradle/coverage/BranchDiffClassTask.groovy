@@ -13,7 +13,7 @@ import org.gradle.api.tasks.TaskAction
  */
 class BranchDiffClassTask extends DefaultTask {
     private final static String TAG = "dq-jacoco-BranchDiffClassTask"
-    private final static String TEMP_DIR = "cc-start"
+    private final static String TEMP_DIR = "app"
     def currentName//当前分支名
     JacocoReportExtension jacocoExtension
 
@@ -47,7 +47,7 @@ class BranchDiffClassTask extends DefaultTask {
         //两个分支差异文件的目录
         //handleDiffClasses(currentName, diffFiles)
 
-        //copy class到 cc-start/classes
+        //copy class到 app/classes
         //copyDiffClass(diffFiles)
     }
 

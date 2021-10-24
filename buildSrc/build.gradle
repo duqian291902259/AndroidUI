@@ -1,3 +1,6 @@
+apply plugin: 'groovy'
+apply plugin: 'kotlin'
+
 buildscript {
     // 这里是给插件使用
     def myProperties = new Properties()
@@ -19,15 +22,31 @@ buildscript {
 repositories {
     mavenCentral()
     google()
+    mavenLocal()
 }
 
+sourceSets {
+    main {
+        groovy {
+            srcDir 'src/main/groovy'
+        }
 
-apply plugin: 'groovy'
-apply plugin: 'kotlin'
+        java {
+            srcDir 'src/main/java'
+        }
+
+        resources {
+            srcDir 'src/main/resources'
+        }
+    }
+}
 
 dependencies {
     implementation gradleApi()
+    implementation localGroovy()
+
     implementation 'com.android.tools.build:gradle:' + gradle_tool_version
+    implementation 'com.android.tools.build:transform-api:1.5.0'
 
     //implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.6.14'
     //implementation 'org.eclipse.jgit:org.eclipse.jgit:5.0.2.201807311906-r'
@@ -41,3 +60,21 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.12.13'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.13'
 }
+
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+group = 'site.duqian.gradle'
+version = '1.0.0'
+//gradlew uploadArchives
+
+uploadArchives {
+    repositories {
+        flatDir {
+            name "localRepository"
+            dir "../app/localRepository/libs"
+        }
+    }
+}
+

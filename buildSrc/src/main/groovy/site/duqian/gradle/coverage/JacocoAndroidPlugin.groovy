@@ -32,7 +32,7 @@ class JacocoAndroidPlugin implements Plugin<ProjectInternal> {
         //配置BuildConfig
         updateBuildConfigField(project,jacocoHost)
 
-        if (!isJacocoEnable || "cc-start" != project.getName()) {
+        if (!isJacocoEnable || "app" != project.getName()) {
             println("$TAG isJacocoEnable = false")
             return
         }
@@ -128,7 +128,7 @@ class JacocoAndroidPlugin implements Plugin<ProjectInternal> {
                 def moduleName = s.getName()
                 if (moduleName == "api") continue
                 //println("$TAG moduleName= ${s.getName()}")
-                if ("basiclib-common".equalsIgnoreCase(moduleName) || "cc-start".equalsIgnoreCase(moduleName)) {
+                if ("basiclib-common".equalsIgnoreCase(moduleName) || "app".equalsIgnoreCase(moduleName)) {
                     println("$TAG updateBuildConfigField ${s.getName()}")
                     def defaultConfig = s.android.defaultConfig
                     defaultConfig.buildConfigField "String", "CURRENT_BRANCH_NAME", "\"" + currentBranchName + "\""
