@@ -29,25 +29,26 @@ class DataModel {
     @OptIn(DelicateCoroutinesApi::class)
     fun test(){
         runBlocking {
-            repeat(10){
+            repeat(1){
                 launch {
-                    println("launch ${System.currentTimeMillis()}")
+                    println("dq launch ${System.currentTimeMillis()}")
                     delay(1000)
                     val status = getUserStatus("123456", "杜小菜")
-                    println("getUserStatus111 $status")
+                    println("dq getUserStatus111 $status")
                 }
             }
         }
 
         //GlobalScope.launch {
         val launch = GlobalScope.launch(Dispatchers.Default) {
+            println("dq launch22 ${System.currentTimeMillis()}")
             //val status = getUserStatus("123456", "杜小菜")
             val status = async {
                 getUserStatus("123456", "杜小菜")
             }
-            println("getUserStatus222 ${status.await()}")
+            println("dq getUserStatus222 ${status.await()},time= ${System.currentTimeMillis()}")
         }
-        println("getUserStatus22 ${launch.isCancelled}")
+        println("dq getUserStatus22 ${launch.isCancelled}")
 
         //launch.cancel()
     }
@@ -62,15 +63,15 @@ class DataModel {
 
     // UserLocalDataSource.kt
     private suspend fun logUserIn(completion: Continuation<Any?>) {
-        println("logUserIn")
+        println("dq logUserIn")
         //return "result"
         completion.resume("杜小菜")
     }
 
     private suspend fun logUserIn(userId: String, password: String): Int {
-        println("logUserIn start ${System.currentTimeMillis()}")
+        println("dq logUserIn start ${System.currentTimeMillis()}")
         SystemClock.sleep(2000)
-        println("logUserIn end ${System.currentTimeMillis()}")
+        println("dq logUserIn end ${System.currentTimeMillis()}")
         return 100
     }
 }
