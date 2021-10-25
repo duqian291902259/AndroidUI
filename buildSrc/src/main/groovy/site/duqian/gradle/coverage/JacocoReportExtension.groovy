@@ -59,7 +59,29 @@ class JacocoReportExtension {
 
     public static final Collection<String> defaultExcludes = (thirdLibExcludes + androidDataBindingExcludes + androidExcludes + dagger2Excludes).asImmutable()
 
-    //static Closure<Collection<String>> defaultExcludesFactory = { defaultExcludes }
+    public static final Collection<String> srcIncludes =
+            ['**.java',
+             '**.kt',
+             '**/**.java', '**/**.kt'
+            ].asImmutable()
+
+    public static Collection<String> srcExcludes = []
+
+    public static final Collection<String> defaultSrcIncludes = (srcIncludes).asImmutable()
+    public static final Collection<String> defaultSrcExcludes = (getSrcExcludes()).asImmutable()
+
+    private static Collection<String> getSrcExcludes() {
+        if (srcExcludes.size() <= 0) {
+            List<String> srcExcludeList = new ArrayList<>()
+            defaultExcludes.forEach {
+                def excludeSrc = it.replace(".class", ".java")
+                println("dq-jacoco excludeSrc="+excludeSrc)
+                srcExcludeList.add(excludeSrc)
+            }
+            srcExcludes = srcExcludes.asCollection()
+        }
+        return srcExcludes
+    }
 
     //jacoco开关
     boolean isJacocoEnable = true

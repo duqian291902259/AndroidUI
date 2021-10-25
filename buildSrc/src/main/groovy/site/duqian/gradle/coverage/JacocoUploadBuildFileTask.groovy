@@ -70,13 +70,34 @@ class JacocoUploadBuildFileTask extends DefaultTask {
             int count = 0
             projects.forEach {
                 def currentSrcDir = it.projectDir.getAbsolutePath() + File.separator + "src/main/java/${packagePath}"
-                if (!currentSrcDir.contains(File.separator + "api" + File.separator)) {
-                    println "$TAG copySourceFiles currentSrcDir=${currentSrcDir}"
-                    File srcFile = new File(currentSrcDir)
-                    if (srcFile.isDirectory() && srcFile.listFiles() != null) {
+                if (filterSrcDir(currentSrcDir)) {
+                    // 过滤不需要统计的源码文件
+                    def project = it
+                    def finalSrcDir = project.files(project.files(currentSrcDir).files.collect {
+                        project.fileTree(dir: it,
+                                //includes: JacocoReportExtension.defaultSrcIncludes,
+                                excludes: JacocoReportExtension.defaultSrcExcludes
+                        )
+                    })
+                    for (String path : finalSrcDir) {
+                        //println "$TAG $packageNameToPath -->path=$path"
+                        int index = path.indexOf(packageNameToPath)
+                        if (index >= 0) {
+                            String suffix = path.substring(index + packageNameToPath.length())
+                            boolean copied = FileUtil.copyFile(new File(path), new File(targetDir + suffix))
+                            if (copied) {
+                                count++
+                            }
+                            //println "$TAG copy src=${path},copied=$copied"
+                        }
+                    }
+
+                    //println "$TAG copySourceFiles currentSrcDir=${currentSrcDir}"
+                    /*File srcFile = new File(currentSrcDir)
+                    if (srcFile.exists() && srcFile.isDirectory() && srcFile.listFiles() != null) {
                         FileUtils.copyDirectory(srcFile, targetFile)
                         count++
-                    }
+                    }*/
                 }
             }
             println "$TAG copy src count=${count}"
@@ -105,14 +126,22 @@ class JacocoUploadBuildFileTask extends DefaultTask {
     }
 
     private String getPackagePath() {
-        extension.packageName
         def android = project.extensions.android
         def applicationId = android.defaultConfig.applicationId
         println "$TAG applicationId :$applicationId,packageName=${extension.packageName}"
         String packagePath = applicationId.replaceAll("\\.", Matcher.quoteReplacement(File.separator));
         return packagePath
-        //return "site.duqian.android_ui".replaceAll(".", ""+File.separator)
     }
+
+
+    /**
+     * 过滤不需要的dir。todo-dq 外部传入
+     * 将语句括在括号中，否则unexpected token: &&，不能正常编译。
+     */
+    private static boolean filterSrcDir(String srcDir) {
+        return (!srcDir.contains(File.separator + "buildSrc" + File.separator))
+    }
+
 
     private def copyClassesAndZip() {
         //1,copy all cc-class to outer dir
@@ -182,38 +211,37 @@ class JacocoUploadBuildFileTask extends DefaultTask {
             int count = 0
             projects.forEach {
                 def currentBuildDir = it.buildDir.getAbsolutePath()
-                //if (!currentBuildDir.contains(File.separator + "api" + File.separator + "build")) {
-
-                String classesDir = "$currentBuildDir\\intermediates\\javac\\debug\\classes\\$packageName"
-                def kotlin = JacocoUtils.hasKotlin(it.plugins)
-                println "$TAG copyBuildClassDirs classesDir:$classesDir,kotlin=$kotlin"
-                if (kotlin) {
-                    classesDir = "$currentBuildDir\\tmp\\kotlin-classes\\debug\\$packageName"
-                }
-
-                // 过滤不需要统计的class文件
-                def project = it
-                def finalClassDir = project.files(project.files(classesDir).files.collect {
-                    project.fileTree(dir: it,
-                            excludes: JacocoReportExtension.defaultExcludes)
-                })
-                for (String path : finalClassDir) {
-                    println "$TAG $packageName -->path=$path"
-                    int index = path.indexOf(packageName)
-                    if (index >= 0) {
-                        String suffix = path.substring(index + packageName.length())
-                        boolean copied = FileUtil.copyFile(new File(path), new File(targetDir + suffix))
-                        if (copied) {
-                            count++
-                        }
-                        //println "$TAG copy to -->path=${targetDir + suffix},copied=$copied"
+                if (filterSrcDir(currentBuildDir)) {
+                    String classesDir = "$currentBuildDir\\intermediates\\javac\\debug\\classes\\$packageName"
+                    def kotlin = JacocoUtils.hasKotlin(it.plugins)
+                    println "$TAG copyBuildClassDirs classesDir:$classesDir,kotlin=$kotlin"
+                    if (kotlin) {
+                        classesDir = "$currentBuildDir\\tmp\\kotlin-classes\\debug\\$packageName"
                     }
+
+                    // 过滤不需要统计的class文件
+                    def project = it
+                    def finalClassDir = project.files(project.files(classesDir).files.collect {
+                        project.fileTree(dir: it,
+                                excludes: JacocoReportExtension.defaultExcludes)
+                    })
+                    for (String path : finalClassDir) {
+                        println "$TAG $packageName -->path=$path"
+                        int index = path.indexOf(packageName)
+                        if (index >= 0) {
+                            String suffix = path.substring(index + packageName.length())
+                            boolean copied = FileUtil.copyFile(new File(path), new File(targetDir + suffix))
+                            if (copied) {
+                                count++
+                            }
+                            //println "$TAG copy to -->path=${targetDir + suffix},copied=$copied"
+                        }
+                    }
+                    /*File classFile = new File(classesDir)
+                    if (classFile.isDirectory() && classFile.listFiles() != null) {
+                        FileUtils.copyDirectory(classFile, targetFile)
+                    }*/
                 }
-                /*File classFile = new File(classesDir)
-                if (classFile.isDirectory() && classFile.listFiles() != null) {
-                    FileUtils.copyDirectory(classFile, targetFile)
-                }*/
-                //}
             }
             println "$TAG copy class count=${count}"
 
