@@ -16,7 +16,7 @@ import org.gradle.testing.jacoco.tasks.JacocoReport
 class JacocoAndroidPlugin implements Plugin<ProjectInternal> {
 
     private static String TAG = "dq-jacoco-JacocoAndroidPlugin"
-    private static String GROUP = "cc-jacoco"
+    private static String GROUP = "report-jacoco"
     private static String TASK_JACOCO_ALL = "jacocoAllTaskLauncher"
     private static String TASK_JACOCO_DOWNLOAD_EC = "jacocoDownloadEcData"
     private static String TASK_JACOCO_UPLOAD_BUILD_FILES = "jacocoUploadBuildFiles"

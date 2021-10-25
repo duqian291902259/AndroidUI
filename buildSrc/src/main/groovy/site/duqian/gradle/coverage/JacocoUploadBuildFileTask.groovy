@@ -1,6 +1,7 @@
 package site.duqian.gradle.coverage;
 
 import com.android.utils.FileUtils
+import org.gradle.util.TextUtil
 import site.duqian.gradle.util.FileUtil
 import okhttp3.*
 import org.gradle.api.DefaultTask
@@ -8,9 +9,11 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
 
 import java.util.concurrent.TimeUnit
+import java.util.regex.Matcher
+
 /**
  * Description:上传build后的产物，这里上传classes
- * @author  Created by 杜小菜 on 2021/9/22 - 16:25 .
+ * @author Created by 杜小菜 on 2021/9/22 - 16:25 .
  * E-mail: duqian2010@gmail.com
  */
 class JacocoUploadBuildFileTask extends DefaultTask {
@@ -19,7 +22,7 @@ class JacocoUploadBuildFileTask extends DefaultTask {
     public static final String TYPE_FILE_ZIP = ".zip"
     public static final String TYPE_FILE_APK = ".apk"
     public static final String TYPE_FILE_TXT = ".txt"
-    private JacocoReportExtension extension
+    public JacocoReportExtension extension
 
     void setExtension(JacocoReportExtension extension) {
         this.extension = extension
@@ -55,9 +58,9 @@ class JacocoUploadBuildFileTask extends DefaultTask {
 
     private def uploadSourceFiles() {
         try {
-            //1,copy src,只处理自己包名下的class：com.netease.cc
+            //1,copy src,只处理自己包名下的class：
             String rootDir = getSrcSavedDir()
-            def packagePath = "com" + File.separator + "netease" + File.separator + "cc"
+            Object packagePath = getPackagePath()
             String targetDir = rootDir + File.separator + packagePath
             File targetFile = new File(targetDir)
             FileUtil.deleteDirectory(targetDir)
@@ -66,10 +69,9 @@ class JacocoUploadBuildFileTask extends DefaultTask {
             Set<Project> projects = project.rootProject.subprojects
             int count = 0
             projects.forEach {
-                def currentSrcDir = it.projectDir.getAbsolutePath() + File.separator + "src/main/java/com/netease/cc"
-                //if (currentSrcDir.contains("component-") && !currentSrcDir.contains(File.separator + "api" + File.separator)) {
+                def currentSrcDir = it.projectDir.getAbsolutePath() + File.separator + "src/main/java/${packagePath}"
                 if (!currentSrcDir.contains(File.separator + "api" + File.separator)) {
-                    //println "$TAG copySourceFiles currentSrcDir=${currentSrcDir}"
+                    println "$TAG copySourceFiles currentSrcDir=${currentSrcDir}"
                     File srcFile = new File(currentSrcDir)
                     if (srcFile.isDirectory() && srcFile.listFiles() != null) {
                         FileUtils.copyDirectory(srcFile, targetFile)
@@ -100,6 +102,16 @@ class JacocoUploadBuildFileTask extends DefaultTask {
         } catch (Exception ignored) {
             println "$TAG uploadSourceFiles failed:$ignored"
         }
+    }
+
+    private String getPackagePath() {
+        extension.packageName
+        def android = project.extensions.android
+        def applicationId = android.defaultConfig.applicationId
+        println "$TAG applicationId :$applicationId,packageName=${extension.packageName}"
+        String packagePath = applicationId.replaceAll("\\.", Matcher.quoteReplacement(File.separator));
+        return packagePath
+        //return "site.duqian.android_ui".replaceAll(".", ""+File.separator)
     }
 
     private def copyClassesAndZip() {
@@ -151,8 +163,6 @@ class JacocoUploadBuildFileTask extends DefaultTask {
         return "${rootDir}/src.zip"
     }
 
-    public static String CC_PACKAGE_FILE_NAME = "com" + File.separator + "netease" + File.separator + "cc"
-
     /**
      * copy指定目录下面的class
      * @return 保存文件的根目录
@@ -161,8 +171,9 @@ class JacocoUploadBuildFileTask extends DefaultTask {
         //过滤不需要的文件
         try {
             String rootDir = getClassSavedDir()
-            //只处理自己包名下的class：com.netease.cc
-            String targetDir = rootDir + File.separator + CC_PACKAGE_FILE_NAME
+            //只处理自己包名下的class：
+            String packageName = getPackagePath()
+            String targetDir = rootDir + File.separator + packageName
             File targetFile = new File(targetDir)
             FileUtil.deleteDirectory(targetDir)
             targetFile.mkdirs()
@@ -170,41 +181,39 @@ class JacocoUploadBuildFileTask extends DefaultTask {
             Set<Project> projects = project.rootProject.subprojects
             int count = 0
             projects.forEach {
-                //D:\NetEase\cc-projects\CC-Android-D\base\build 除外
                 def currentBuildDir = it.buildDir.getAbsolutePath()
-                //if (currentBuildDir.contains("component-") && !currentBuildDir.contains(File.separator + "api" + File.separator + "build")) {
-                if (!currentBuildDir.contains(File.separator + "api" + File.separator + "build")) {
+                //if (!currentBuildDir.contains(File.separator + "api" + File.separator + "build")) {
 
-                    String classesDir = "$currentBuildDir\\intermediates\\javac\\debug\\classes\\$CC_PACKAGE_FILE_NAME"
-                    def kotlin = JacocoUtils.hasKotlin(it.plugins)
-                    //println "$TAG copyBuildClassDirs classesDir:$classesDir,kotlin=$kotlin"
-                    if (kotlin) {
-                        classesDir = "$currentBuildDir\\tmp\\kotlin-classes\\debug\\$CC_PACKAGE_FILE_NAME"
-                    }
-
-                    // 过滤不需要统计的class文件
-                    def project = it
-                    def finalClassDir = project.files(project.files(classesDir).files.collect {
-                        project.fileTree(dir: it,
-                                excludes: JacocoReportExtension.defaultExcludes)
-                    })
-                    for (String path : finalClassDir) {
-                        //println "$TAG $CC_PACKAGE_FILE_NAME -->path=$path"
-                        int index = path.indexOf(CC_PACKAGE_FILE_NAME)
-                        if (index >= 0) {
-                            String suffix = path.substring(index + CC_PACKAGE_FILE_NAME.length())
-                            boolean copied = FileUtil.copyFile(new File(path), new File(targetDir + suffix))
-                            if (copied) {
-                                count++
-                            }
-                            //println "$TAG copy to -->path=${targetDir + suffix},copied=$copied"
-                        }
-                    }
-                    /*File classFile = new File(classesDir)
-                    if (classFile.isDirectory() && classFile.listFiles() != null) {
-                        FileUtils.copyDirectory(classFile, targetFile)
-                    }*/
+                String classesDir = "$currentBuildDir\\intermediates\\javac\\debug\\classes\\$packageName"
+                def kotlin = JacocoUtils.hasKotlin(it.plugins)
+                println "$TAG copyBuildClassDirs classesDir:$classesDir,kotlin=$kotlin"
+                if (kotlin) {
+                    classesDir = "$currentBuildDir\\tmp\\kotlin-classes\\debug\\$packageName"
                 }
+
+                // 过滤不需要统计的class文件
+                def project = it
+                def finalClassDir = project.files(project.files(classesDir).files.collect {
+                    project.fileTree(dir: it,
+                            excludes: JacocoReportExtension.defaultExcludes)
+                })
+                for (String path : finalClassDir) {
+                    println "$TAG $packageName -->path=$path"
+                    int index = path.indexOf(packageName)
+                    if (index >= 0) {
+                        String suffix = path.substring(index + packageName.length())
+                        boolean copied = FileUtil.copyFile(new File(path), new File(targetDir + suffix))
+                        if (copied) {
+                            count++
+                        }
+                        //println "$TAG copy to -->path=${targetDir + suffix},copied=$copied"
+                    }
+                }
+                /*File classFile = new File(classesDir)
+                if (classFile.isDirectory() && classFile.listFiles() != null) {
+                    FileUtils.copyDirectory(classFile, targetFile)
+                }*/
+                //}
             }
             println "$TAG copy class count=${count}"
 
@@ -215,7 +224,7 @@ class JacocoUploadBuildFileTask extends DefaultTask {
         return ""
     }
 
-    private boolean compressToZip(String classesDir, String zipFilePath) {
+    private static boolean compressToZip(String classesDir, String zipFilePath) {
         try {
             FileUtil.deleteFile(zipFilePath)
             FileUtil.zipFolder(classesDir, zipFilePath)

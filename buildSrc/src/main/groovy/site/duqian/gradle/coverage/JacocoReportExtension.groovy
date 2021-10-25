@@ -66,16 +66,16 @@ class JacocoReportExtension {
     boolean isDiffJacoco = false //是否差量更新
 
     //需要对比class的分支名
-    String branchName
+    String branchName = "master"
     //需要插桩的文件
     List<String> includes
     String gitPushShell
     String pullDiffClassShell
     //git-bash的路径，如果找不到，自行配置
     private String gitBashPath
-    String appName = "cc-android"
+    String appName = ""
+    String packageName = ""
     String jacocoHost //服务器地址
-   // String reportHost //报告地址
 
     String getGitBashPath() {
         if (gitBashPath == null || gitBashPath.isEmpty()) {

@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import site.duqian.android_ui.fragment.BaseFragment
 import site.duqian.mylibrary.KotlinUtil
-import site.duqian.test.CCJacocoHelper
+import site.duqian.android_ui.utils.CCJacocoHelper
 
 class MainActivity : AppCompatActivity() {
 

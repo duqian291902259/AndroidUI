@@ -1,4 +1,4 @@
-package site.duqian.test
+package site.duqian.android_ui.utils
 
 import android.content.Context
 import android.os.Environment
@@ -18,7 +18,10 @@ object CCJacocoHelper {
 
     //ec文件的路径
     private val DEFAULT_COVERAGE_ROOT_DIR =
-        Environment.getExternalStorageDirectory().absolutePath + "/Android/data/site.duqian.test/coverage/"
+        Environment.getExternalStorageDirectory().absolutePath + "/Android/data/site.duqian.test/cache/connected/"
+    private var mRootDir = DEFAULT_COVERAGE_ROOT_DIR
+    private const val localHost = "http://127.0.0.1:8090"
+    private const val URL_HOST = localHost
 
     /**
      * 生成ec文件
@@ -29,15 +32,11 @@ object CCJacocoHelper {
         Thread().run {
             var out: OutputStream? = null
             //todo-dq 按照时间戳命名?
-            //val fileName = "dq_jacoco_${System.currentTimeMillis()}.ec"
-            val fileName = "coverage.ec"
-            var rootDir = context?.externalCacheDir?.absolutePath + File.separator
-            if (TextUtils.isEmpty(rootDir)) {
-                rootDir = DEFAULT_COVERAGE_ROOT_DIR
-            }
+            val fileName = "dq_jacoco_${System.currentTimeMillis()}.ec"
+            //val fileName = "coverage.ec"
+            val rootDir = getJacocoEcFileSaveDir(context)
             val path = rootDir + fileName
             Log.d(TAG, "generateEcFile path is $path")
-
             val mCoverageFile = File(path)
             try {
                 File(rootDir).mkdirs()
@@ -73,4 +72,14 @@ object CCJacocoHelper {
             }
         }
     }
+
+
+    private fun getJacocoEcFileSaveDir(context: Context?): String {
+        val root = context?.externalCacheDir?.absolutePath?.toString()
+        if (!TextUtils.isEmpty(root)) {
+            mRootDir = "$root/connected/"
+        }
+        return mRootDir
+    }
+
 }

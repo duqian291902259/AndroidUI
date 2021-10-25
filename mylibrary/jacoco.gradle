@@ -38,8 +38,7 @@ task jacocoTestReportNew(type: JacocoReport) {
 
     sourceDirectories.setFrom(coverageSourceDirs)
 
-    executionData.setFrom(files("$buildDir/outputs/code_coverage/coverage.ec"))
-    //executionData.setFrom(files('$buildDir/outputs/code_coverage/debugAndroidTest/connected/Pixel_4_XL_API_30(AVD) - 11-coverage.ec'))
+    executionData.setFrom(files("$buildDir/outputs/code_coverage/connected/coverage.ec"))
 
     doFirst {
         System.out.println("buildDir=$buildDir")
@@ -62,7 +61,7 @@ task jacocoTestReportNew(type: JacocoReport) {
 task jacocoInit() {
     group = "JacocoReport"
     doFirst {
-        File file = new File("$buildDir/outputs/code_coverage/")
+        File file = new File("$buildDir/outputs/code_coverage/connected/")
         if (!file.exists()) {
             file.mkdir()
         }

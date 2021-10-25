@@ -7,12 +7,12 @@ import org.gradle.api.tasks.TaskAction
 
 /**
  * Description:下载ec文件到指定的目录，后续做git diff和生成增量覆盖率报告等逻辑
- * @author  Created by 杜小菜 on 2021/9/10 - 18:39 .
+ * @author Created by 杜小菜 on 2021/9/10 - 18:39 .
  * E-mail: duqian2010@gmail.com
  */
 class JacocoDownloadTask extends DefaultTask {
 
-    private JacocoReportExtension extension
+    public JacocoReportExtension extension
 
     void setExtension(JacocoReportExtension extension) {
         this.extension = extension
@@ -21,23 +21,39 @@ class JacocoDownloadTask extends DefaultTask {
     @TaskAction
     def downloadJacocoEcFile() {
         try {
+            def dataDir = "${project.buildDir}/outputs/code_coverage/connected/"
+            File rootFile = new File(dataDir)
+            //先清除缓存
+            rootFile.deleteDir()
+            FileUtil.deleteDirectory(dataDir)
+            rootFile.mkdirs()
+
+            //本地拉取
+            pullLocalEcFiles(dataDir)
+
+            //远程下载
             println "downloadJacocoEcFile start local dq"
-            downloadEcData()
+            downloadEcData(dataDir)
             println "downloadJacocoEcFile end"
+
+            //copy到外部目录备用，"ec-" + commitId
+            File targetDir = new File(JacocoUtils.getUploadRootDir(project) + File.separator + "ec")
+            targetDir.deleteDir()
+            FileUtils.copyDirectory(rootFile, targetDir)
         } catch (Exception e) {
             println "downloadJacocoEcFile error=$e"
         }
     }
 
-    //下载ec数据文件
-    private def downloadEcData() {
-        def dataDir = "${project.buildDir}/outputs/code_coverage/connected/"
-        File rootFile = new File(dataDir)
-        //先清除
-        rootFile.deleteDir()
-        FileUtil.deleteDirectory(dataDir)
-        rootFile.mkdirs()
+    private def pullLocalEcFiles(String rootDir) {
+        def dataDir = new File(rootDir).getParentFile().getAbsolutePath()
+        def ecDir = "/sdcard/Android/data/${extension.packageName}/cache/connected/"
+        def pullEcFile = "adb pull $ecDir $dataDir".execute().text
+        println "pullEcFile=${pullEcFile}"
+    }
 
+    //下载ec数据文件
+    private def downloadEcData(String dataDir) {
         def host = extension.jacocoHost
         def appName = extension.appName
         def branch = JacocoUtils.getCurrentBranchName()
@@ -76,9 +92,6 @@ class JacocoDownloadTask extends DefaultTask {
                 "curl -o ${file.getAbsolutePath()} ${host}/download?path=${path}".execute().text
             }
         }
-
-        //copy到外部目录备用，可以不用
-        FileUtils.copyDirectory(rootFile, new File(JacocoUtils.getUploadRootDir(project) + File.separator + "ec-" + commitId))
         println "downloadData 下载完成"
     }
 
